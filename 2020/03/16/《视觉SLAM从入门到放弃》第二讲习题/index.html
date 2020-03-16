@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Crlynn">
   <meta name="keywords" content="">
-  <title>标签 - SLAM - 你来啦~</title>
+  <title>《视觉SLAM从入门到放弃》第二讲习题 - 你来啦~</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -43,7 +43,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -103,7 +103,7 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('/img/%E5%B0%8F%E8%90%9D%E5%8D%9C.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -112,6 +112,33 @@
               
             </span>
 
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期一, 三月 16日 2020, 4:09 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    267 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      1 分钟
+                  </span>
+                
+
+                
+              </p>
             
           </div>
 
@@ -123,43 +150,83 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-<!--  <p class="h4">共计 2 篇文章</p>-->
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/03/16/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%E3%80%8B%E7%AC%AC%E4%BA%8C%E8%AE%B2%E4%B9%A0%E9%A2%98/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">《视觉SLAM从入门到放弃》第二讲习题</span>
-      <span style="float: right;">03-16</span>
-    </a>
-  
-    
-    <a href="/2020/03/15/%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%8D%9A%E5%AE%A2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">前期：虚拟机+博客</span>
-      <span style="float: right;">03-15</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p><strong>1. 阅读文献<a href="/img/基于单目视觉的同时定位与地图构建方法综述.pdf">[ 1 ]</a>和[ 14 ]，你能看懂文献的内容吗？</strong></p>
+<ol>
+<li>文献[ 1 ]主要专注于对基于单目视觉的 SLAM 方法的分析和讨论, 系统地介绍和分析目前 3 类(基于滤波，关键帧BA,直接跟踪)主流单目 V-SLAM 方法的优缺点, 并对它们的代表性系统进行性能分析和比较。另外, 也介绍和讨论了 V-SLAM 技术的最新研究热点和发展趋势, 并进行总结和展望。</li>
+<li>文献[ 14 ]等找到了就看qwq</li>
+</ol>
+<p><strong>3. g++命令有哪些参数？再怎么填写参数可以更改生成的程序文件名？</strong></p>
+<ol>
+<li><a href="https://blog.csdn.net/huangyimo/article/details/78591990" target="_blank" rel="noopener">g++参数介绍</a></li>
+<li><code>g++ 文件名 -o 执行程序名</code><br>前：<br><img src="/img/ch2_2_1.png" srcset="/img/loading.gif" alt=""><br>后：<br><img src="/img/ch2_2_2.png" srcset="/img/loading.gif" alt=""></li>
+</ol>
+<p><strong>5. 刻意在代码中添加一些语法错误，看看编译会生成什么样的信息。你能看懂 g++ 的错误吗？</strong><br>&emsp;我能！我百度超厉害！</p>
+<p><strong>6. 如果忘了把库链接到可执行程序上，编译会报错吗？什么样的错？</strong><br>&emsp;那必然会<br>&emsp;<code>undefined reference</code></p>
 
-
-              </div>
             </div>
+            <hr>
+            <div>
+              <p>
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/SLAM/">SLAM</a>
+                    
+                  </span>
+                
+              </p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-12 col-md-6">
+                    
+                  </div>
+                  <div class="post-next col-12 col-md-6">
+                    
+                      <a href="/2020/03/15/%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%8D%9A%E5%AE%A2/">
+                        <span>前期：虚拟机+博客</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
           </div>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
   </main>
 
@@ -225,6 +292,60 @@
 
 
 
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        console.log(tocLimMax, scroH)
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
 
 
 
@@ -251,7 +372,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "标签 - SLAM&nbsp;",
+        "《视觉SLAM从入门到放弃》第二讲习题&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
