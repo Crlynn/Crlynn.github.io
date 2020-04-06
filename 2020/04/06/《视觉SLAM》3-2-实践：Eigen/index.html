@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Crlynn">
   <meta name="keywords" content="">
-  <title>《视觉SLAM从入门到放弃》第二讲习题 - 你来啦~</title>
+  <title>《视觉SLAM》3.2 实践：Eigen - 你来啦~</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -103,7 +103,7 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('/img/%E5%B0%8F%E8%90%9D%E5%8D%9C.jpg') no-repeat center center;
+         style="background: url('/img/%E9%AC%BC%E5%88%80.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -116,7 +116,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 三月 16日 2020, 4:09 下午
+                  星期一, 四月 6日 2020, 1:27 下午
                 </p>
               
 
@@ -125,7 +125,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    267 字
+                    832 字
                   </span>
                 
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      4 分钟
                   </span>
                 
 
@@ -161,19 +161,145 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <p><strong>1. 阅读文献<a href="/img/基于单目视觉的同时定位与地图构建方法综述.pdf">[ 1 ]</a>和[ 14 ]，你能看懂文献的内容吗？</strong></p>
-<ol>
-<li>文献[ 1 ]主要专注于对基于单目视觉的 SLAM 方法的分析和讨论, 系统地介绍和分析目前 3 类(基于滤波，关键帧BA,直接跟踪)主流单目 V-SLAM 方法的优缺点, 并对它们的代表性系统进行性能分析和比较。另外, 也介绍和讨论了 V-SLAM 技术的最新研究热点和发展趋势, 并进行总结和展望。</li>
-<li>文献[ 14 ]等找到了就看qwq</li>
-</ol>
-<p><strong>3. g++命令有哪些参数？再怎么填写参数可以更改生成的程序文件名？</strong></p>
-<ol>
-<li><a href="https://blog.csdn.net/huangyimo/article/details/78591990" target="_blank" rel="noopener">g++参数介绍</a></li>
-<li><code>g++ 文件名 -o 执行程序名</code><br>前：<br><img src="/img/ch2_2_1.png" srcset="/img/loading.gif" alt=""><br>后：<br><img src="/img/ch2_2_2.png" srcset="/img/loading.gif" alt=""></li>
-</ol>
-<p><strong>5. 刻意在代码中添加一些语法错误，看看编译会生成什么样的信息。你能看懂 g++ 的错误吗？</strong><br>&emsp;我能！我百度超厉害！</p>
-<p><strong>6. 如果忘了把库链接到可执行程序上，编译会报错吗？什么样的错？</strong><br>&emsp;那必然会<br>&emsp;<code>undefined reference</code></p>
+              <h2 id="安装Eigen"><a href="#安装Eigen" class="headerlink" title="安装Eigen"></a>安装Eigen</h2><pre><code class="bash">$ sudo apt-get install libegigen3-dev</code></pre>
+<p>安装完成后输入</p>
+<pre><code class="bash">$ sudo updatedb
+$ locate eigen3</code></pre>
+<p>查找其头文件的位置，我安装在了<code>/usr/include/eigen3/</code>中<br><img src="/img/Eigen%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE.png" srcset="/img/loading.gif" alt=""></p>
+<h2 id="开始练习"><a href="#开始练习" class="headerlink" title="开始练习"></a>开始练习</h2><p>编译时出了点小问题</p>
+<h3 id="致-命-错-误-fatal-error"><a href="#致-命-错-误-fatal-error" class="headerlink" title="致 命 错 误 : fatal error"></a>致 命 错 误 : fatal error</h3><p><img src="/img/fatalerror.png" srcset="/img/loading.gif" alt=""><br>因为Eigen安装在<code>/usr/include/eigen3/</code>中，而默认环境变量为<code>/usr/include</code>，因此需添加路径</p>
+<pre><code class="bash">sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen</code></pre>
+<p>将<code>/usr/include/eigen3/</code>映射到<code>/usr/include</code>下</p>
+<h3 id="代码及输出"><a href="#代码及输出" class="headerlink" title="代码及输出"></a>代码及输出</h3><pre><code class="bash">#include &lt;iostream&gt;
+#include&lt;ctime&gt;
+using namespace std;
+#include &lt;Eigen/Core&gt;
+#include &lt;Eigen/Dense&gt;
+#define MATRIX_SIZE 50
+int main(){
+  //Eigen参数：数据类型，行，列
+  Eigen::Matrix&lt;float,2,3&gt;matrix_23;    //2*3的矩阵
+  Eigen::Vector3d v_3d;        //Eigen::Matrix&lt;double,3,1&gt;
+  Eigen::Matrix3d matrix_33 = Eigen::Matrix3d::Zero();        //Eigen::Matrix&lt;double,3,3&gt;,并初始化为零
+  Eigen::Matrix&lt;double,Eigen::Dynamic,Eigen::Dynamic&gt; matrix_dynamic;        //动态大小
+  Eigen::MatrixXd matrix_x;
 
+  matrix_23 &lt;&lt; 1,2,3,4,5,6;
+  cout &lt;&lt; matrix_23 &lt;&lt; endl;
+  // 1 2 3
+  // 4 5 6
+
+  for(int i=0; i&lt;1; i++){
+    for(int j=0; j&lt;2; j++){
+      cout &lt;&lt; matrix_23(i,j) &lt;&lt; endl;
+    }
+  }
+  // 1
+  // 2
+
+  v_3d &lt;&lt; 3,2,1;
+  Eigen::Matrix&lt;double, 2, 1&gt;result = matrix_23.cast&lt;double&gt;()*v_3d;
+  cout &lt;&lt; result &lt;&lt; endl;
+  // 10
+  // 28
+
+  //Eigen::Matrix&lt;double,2,3&gt;result_wrong_dimension = matrix_23.cast&lt;double&gt;()*v_3d;
+  //维度不匹配报错：/usr/include/Eigen/src/Core/Assign.h:492:3: error: ‘YOU_MIXED_MATRICES_OF_DIFFERENT_SIZES’ is not a member of ‘Eigen::internal::static_assertion&lt;false&gt;’
+
+  matrix_33 = Eigen::Matrix3d::Random();
+  cout &lt;&lt; matrix_33 &lt;&lt; endl &lt;&lt; endl;
+  // 0.680375   0.59688 -0.329554
+  // -0.211234  0.823295  0.536459
+  //  0.566198 -0.604897 -0.444451
+
+  cout &lt;&lt; matrix_33.transpose() &lt;&lt; endl;    //转置
+  //  0.680375 -0.211234  0.566198
+  //   0.59688  0.823295 -0.604897
+  // -0.329554  0.536459 -0.444451
+
+  cout &lt;&lt; matrix_33.sum() &lt;&lt; endl;    //各元素和
+  //1.61307
+
+  cout &lt;&lt; matrix_33.trace() &lt;&lt; endl;     //迹
+  //1.05922
+
+  cout &lt;&lt; 10*matrix_33 &lt;&lt; endl;        //数乘
+  //  6.80375   5.9688 -3.29554
+  // -2.11234  8.23295  5.36459
+  //  5.66198 -6.04897 -4.44451
+
+  cout &lt;&lt; matrix_33.inverse() &lt;&lt; endl;        //逆
+  // -0.198521   2.22739    2.8357
+  //   1.00605 -0.555135  -1.41603
+  //  -1.62213   3.59308   3.28973
+
+  cout &lt;&lt; matrix_33.determinant() &lt;&lt; endl;    //行列式
+  //0.208598
+
+  Eigen::SelfAdjointEigenSolver&lt;Eigen::Matrix3d&gt;eigen_solver(matrix_33.transpose()*matrix_33);
+  cout &lt;&lt; &quot;Eigen values = &quot; &lt;&lt; eigen_solver.eigenvalues() &lt;&lt; endl;    //特征值
+  //Eigen values = 
+  //0.0242899
+  // 0.992154
+  // 1.80558
+
+  cout &lt;&lt; &quot;Eigen vectors = &quot; &lt;&lt; eigen_solver.eigenvectors() &lt;&lt; endl;    //特征向量
+  // Eigen vectors = 
+  //-0.549013 -0.735943  0.396198
+  //  0.253452 -0.598296 -0.760134
+  // -0.796459  0.316906 -0.514998
+
+  Eigen::Matrix&lt;double,MATRIX_SIZE,MATRIX_SIZE&gt;matrix_NN;
+  matrix_NN = Eigen::MatrixXd::Random(MATRIX_SIZE,MATRIX_SIZE);
+  Eigen::Matrix&lt; double, MATRIX_SIZE,  1&gt; v_Nd;
+  v_Nd = Eigen::MatrixXd::Random( MATRIX_SIZE,1 );
+
+  clock_t time_stt = clock(); // 计时
+    // 直接求逆
+  Eigen::Matrix&lt;double,MATRIX_SIZE,1&gt; x = matrix_NN.inverse()*v_Nd;
+  cout &lt;&lt;&quot;time use in normal inverse is &quot; &lt;&lt; 1000* (clock() - time_stt)/(double)CLOCKS_PER_SEC &lt;&lt; &quot;ms&quot;&lt;&lt; endl;   
+    // 通常用矩阵分解来求，例如QR分解，速度会快很多
+  time_stt = clock();
+  x = matrix_NN.colPivHouseholderQr().solve(v_Nd); 
+  cout &lt;&lt;&quot;time use in Qr decomposition is &quot; &lt;&lt;1000*  (clock() - time_stt)/(double)CLOCKS_PER_SEC &lt;&lt;&quot;ms&quot; &lt;&lt; endl;
+    //time use in normal inverse is 3.494ms
+    //time use in Qr decomposition is 9.553ms
+}</code></pre>
+<h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><pre><code>1 2 3
+4 5 6
+1    2    3    
+4    5    6    
+10
+28
+32
+77
+ 0.680375   0.59688 -0.329554
+-0.211234  0.823295  0.536459
+ 0.566198 -0.604897 -0.444451
+
+ 0.680375 -0.211234  0.566198
+  0.59688  0.823295 -0.604897
+-0.329554  0.536459 -0.444451
+1.61307
+1.05922
+ 6.80375   5.9688 -3.29554
+-2.11234  8.23295  5.36459
+ 5.66198 -6.04897 -4.44451
+-0.198521   2.22739    2.8357
+  1.00605 -0.555135  -1.41603
+ -1.62213   3.59308   3.28973
+0.208598
+Eigen values = 
+0.0242899
+0.992154
+1.80558
+Eigen vectors = 
+-0.549013 -0.735943  0.396198
+ 0.253452 -0.598296 -0.760134
+-0.796459  0.316906 -0.514998
+time use in normal inverse is 3.494ms
+time use in Qr decomposition is 9.553ms
+</code></pre>
             </div>
             <hr>
             <div>
@@ -193,16 +319,11 @@
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
                     
-                      <a href="/2020/04/06/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E3%80%8B3-2-%E5%AE%9E%E8%B7%B5%EF%BC%9AEigen/">
-                        <i class="fa fa-chevron-left"></i>
-                        <span>《视觉SLAM》3.2 实践：Eigen</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-12 col-md-6">
                     
-                      <a href="/2020/03/15/%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%8D%9A%E5%AE%A2/">
-                        <span>前期：虚拟机+博客</span>
+                      <a href="/2020/03/16/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%E3%80%8B%E7%AC%AC%E4%BA%8C%E8%AE%B2%E4%B9%A0%E9%A2%98/">
+                        <span>《视觉SLAM从入门到放弃》第二讲习题</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
                     
@@ -377,7 +498,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "《视觉SLAM从入门到放弃》第二讲习题&nbsp;",
+        "《视觉SLAM》3.2 实践：Eigen&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

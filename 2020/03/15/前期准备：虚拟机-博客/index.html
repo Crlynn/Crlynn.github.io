@@ -28,7 +28,7 @@
 
 
 
-  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night.min.css" />
 
 <link  rel="stylesheet" href="/css/main.css" />
 
@@ -125,7 +125,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    90 字
+                    168 字
                   </span>
                 
 
@@ -171,9 +171,17 @@
 </div>
 
 <h2 id="一些小问题"><a href="#一些小问题" class="headerlink" title="一些小问题"></a>一些小问题</h2><ol>
-<li>关于图片，文档中提供的<code>![](/img/example.jpg)</code>无法更改大小及位置<br>于是用以下方法进行缩小与居中<pre><code>&lt;div align=center&gt;
+<li><p>关于图片，文档中提供的<code>![](/img/example.jpg)</code>无法更改大小及位置<br>于是用以下方法进行缩小与居中</p>
+<pre><code class="bash">&lt;div align=center&gt;
 &lt;img src=&quot;/img/example.jpg&quot; width = &quot;200&quot; height = &quot;200&quot;&gt;
-&lt;/div&gt;</code></pre></li>
+&lt;/div&gt;</code></pre>
+</li>
+<li><p>经常碰到这种情况 : process faild<br><img src="/img/Processfailed.png" srcset="/img/loading.gif" alt=""><br>经检查还是文章头里的tags没加空格qwq<br><code>tags:SLAM</code><br><code>tags: SLAM</code></p>
+</li>
+<li><p>致 命 错 误 : fatal error<br><img src="/img/fatalerror.png" srcset="/img/loading.gif" alt=""><br>因为Eigen安装在<code>/usr/include/eigen3/</code>中，而默认环境变量为<code>/usr/include</code>，因此需添加路径</p>
+<pre><code class="bash">sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen</code></pre>
+<p>将<code>/usr/include/eigen3/</code>映射到<code>/usr/include</code>下</p>
+</li>
 </ol>
 
             </div>
