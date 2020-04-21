@@ -4,19 +4,6 @@
   
   
   <entry>
-    <title>水怪</title>
-    <link href="/2020/04/21/%E6%B0%B4%E6%80%AA/"/>
-    <url>/2020/04/21/%E6%B0%B4%E6%80%AA/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>《视觉SLAM》3.2 实践：Eigen</title>
     <link href="/2020/04/06/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E3%80%8B3-2-%E5%AE%9E%E8%B7%B5%EF%BC%9AEigen/"/>
     <url>/2020/04/06/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E3%80%8B3-2-%E5%AE%9E%E8%B7%B5%EF%BC%9AEigen/</url>
@@ -74,7 +61,26 @@
   
   
   <entry>
-    <title>前期：虚拟机+博客</title>
+    <title>水怪</title>
+    <link href="/2020/03/16/%E6%B0%B4%E6%80%AA/"/>
+    <url>/2020/03/16/%E6%B0%B4%E6%80%AA/</url>
+    
+    <content type="html"><![CDATA[<p>我说：“我们好像在池塘的水底，从一个月亮走向另一个月亮。”<br>妖妖忽然大惊小怪地叫起来：“陈辉，你是诗人呢！”</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>LIFE</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>虚拟机+博客</title>
     <link href="/2020/03/15/%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%8D%9A%E5%AE%A2/"/>
     <url>/2020/03/15/%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA-%E5%8D%9A%E5%AE%A2/</url>
     
@@ -87,25 +93,6 @@
       <tag>SLAM</tag>
       
       <tag>BLOG</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>小 陈 上 线</title>
-    <link href="/2020/03/14/%E5%B0%8F-%E9%99%88-%E4%B8%8A-%E7%BA%BF/"/>
-    <url>/2020/03/14/%E5%B0%8F-%E9%99%88-%E4%B8%8A-%E7%BA%BF/</url>
-    
-    <content type="html"><![CDATA[<p>还有点小激动嘿嘿</p><h2 id="开始的开始"><a href="#开始的开始" class="headerlink" title="开始的开始"></a>开始的开始</h2><p>其实从周一就着手整博客了。想过CSDN，嫌丑；研究下Wp+阿里云，又怕难…<br>我还真是麻烦呢qwq<br>在周五晚上突然想起要开始写周报，发现SLAM一点没学，罪过啊，于是曲线救国开始建博客ovo<br>本来是想边看视频边写教程，作为第一篇。结果还是记到一半就放弃了呜呜呜</p><div align=center><img src="/img/爷就是废物.jpg" srcset="/img/loading.gif" width = 50%></div><h2 id="FLAG现场"><a href="#FLAG现场" class="headerlink" title="FLAG现场"></a>FLAG现场</h2><p>那么大言不惭地说一些我再也不会看的话吧:</p><ol><li>这个学期学完《视觉SLAM十四讲》前七章</li><li>每周写SLAM习题+博客记录</li><li><del>CF还是要打打打qwq</del></li><li>英语是不能放下的</li><li>学一手markdown LaTeX</li><li>还有eigen &amp; opencv &amp; ( pangolin || opengl || pcl )</li><li>还是好好学习天天向上，尽量做个有用的人</li></ol><p><strong>我————顶————得————住————</strong></p><h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p>流水账到此结束<br>总之，这次必有<del>三分钟</del>三年的热度</p>]]></content>
-    
-    
-    
-    <tags>
-      
-      <tag>LIFE</tag>
       
     </tags>
     
