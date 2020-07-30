@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>MESH历险记</title>
+    <link href="/2020/07/29/MESH%E5%8E%86%E9%99%A9%E8%AE%B0/"/>
+    <url>/2020/07/29/MESH%E5%8E%86%E9%99%A9%E8%AE%B0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="了解mesh"><a href="#了解mesh" class="headerlink" title="了解mesh"></a>了解mesh</h2><p>了解不了，百度吧</p><h2 id="读入mesh"><a href="#读入mesh" class="headerlink" title="读入mesh"></a>读入mesh</h2><p>整了段代码</p><pre><code class="bash">#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;//文件头，共84字节struct Head{    char partName[80];//零件名称    int  faceNum;//面的数目};//点，三个float类型的，大小为12字节struct Point{    float x;    float y;    float z;};//法线struct Normal{    float i;    float j;    float k;};//三角面，由一个法线，三个点，和一个两字节的保留项，一共50字节struct Face{    Normal normal;    Point  p1;    Point  p2;    Point  p3;    char  info[2];//保留数据，可以不用管};int main(){    Head head;    FILE* fp;    char fileName[128];    printf(&quot;请输入文件名：\n&quot;);    gets_s(fileName);//控制台里输入文件名称    fp = fopen(fileName, &quot;rb&quot;);    if (fp != NULL)    {        fread(head.partName, 80, 1, fp);//获取部件名        fread(&amp;head.faceNum, 4, 1, fp);//获取三角面片的数目    }    Face* faces = (Face*)malloc(head.faceNum * sizeof(Face));//根据三角面片的数目，创建一个Face类型的数组    //循环读取三角面片数据    for (int i = 0; i &lt; head.faceNum; i++)    {        fread(&amp;faces[i].normal, 12, 1, fp);//读取法线数据        fread(&amp;faces[i].p1, 12, 1, fp);//读取顶点1的数据        fread(&amp;faces[i].p2, 12, 1, fp);//读取顶点2的数据        fread(&amp;faces[i].p3, 12, 1, fp);//读取顶点3的数据        fread(&amp;faces[i].info, 2, 1, fp);//读取保留项数据，这一项一般没什么用，这里选择读取是为了移动文件指针    }    fclose(fp);    printf(&quot;STL文件解析如下：\n&quot;);    printf(&quot;三角形数目：&quot;);    printf(&quot;%d\n&quot;, head.faceNum);    printf(&quot;各面的顶点和法线数据如下：\n&quot;);    //在控制台上输出STL文件的数据    for (int i = 0; i &lt; head.faceNum; i++)    {        printf(&quot;面%d\n&quot;, i + 1);        printf(&quot;法线：\n&quot;);        printf(&quot;%f  %f  %f\n&quot;, faces[i].normal.i, faces[i].normal.j, faces[i].normal.k);        printf(&quot;顶点数据：\n&quot;);        printf(&quot;%f  %f  %f\n&quot;, faces[i].p1.x, faces[i].p1.y, faces[i].p1.z);        printf(&quot;%f  %f  %f\n&quot;, faces[i].p2.x, faces[i].p2.y, faces[i].p2.z);        printf(&quot;%f  %f  %f\n&quot;, faces[i].p2.x, faces[i].p2.y, faces[i].p2.z);    }    return 0;}</code></pre><p>读入小零件之后是这个效果<br><img src="/img/mesh%E5%8E%86%E9%99%A9%E8%AE%B0-%E8%AF%BB%E5%85%A5%E6%95%88%E6%9E%9C.png" srcset="/img/loading.gif" alt=""></p><h2 id="计算mesh"><a href="#计算mesh" class="headerlink" title="计算mesh"></a>计算mesh</h2><p>2020/7/30 尝试失败</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>SLAM</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>《视觉SLAM》3.2 实践：Eigen</title>
     <link href="/2020/04/06/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E3%80%8B3-2-%E5%AE%9E%E8%B7%B5%EF%BC%9AEigen/"/>
     <url>/2020/04/06/%E3%80%8A%E8%A7%86%E8%A7%89SLAM%E3%80%8B3-2-%E5%AE%9E%E8%B7%B5%EF%BC%9AEigen/</url>
