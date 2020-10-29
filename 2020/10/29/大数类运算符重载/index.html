@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    4.1k 字
+                    4.3k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      21 分钟
+                      22 分钟
                   </span>
                 
 
@@ -169,30 +169,888 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <p>#include <iostream><br>#include &lt;stdio.h&gt;<br>#include <algorithm><br>#include &lt;string.h&gt;<br>#include <vector><br>#define max(a, b)  (((a) &gt; (b)) ? (a) : (b))<br>using namespace std;<br>class BigNum {<br>public:<br>    vector<int>a;<br>    int len;<br>    bool f = 1;<br>    BigNum() { len = 1; f = 1; }<br>    BigNum(const int); //将一个int类型的变量转化成大数<br>    BigNum(const char<em>); //将一个char数组类型的变量转化为大数<br>    BigNum(const string); //将一个string类型的变量转化为大数<br>    BigNum(const vector<int>); //将一个vector类型的变量转化为大数<br>    BigNum(const BigNum&amp;); //拷贝构造函数<br>    BigNum&amp; operator=(const BigNum&amp;); //重载赋值运算符，大数之间进行赋值运算<br>    friend istream&amp; operator&gt;&gt;(istream&amp;, BigNum&amp;); //重载输入运算符<br>    friend ostream&amp; operator&lt;&lt;(ostream&amp;, BigNum&amp;); //重载输出运算符<br>    void print(); //输出大数<br>    BigNum operator+(const BigNum&amp;)const; //重载加法运算符，两个大数之间的相加运算<br>    BigNum operator-(const BigNum&amp;)const; //重载减法运算符，两个大数之间的相减运算<br>    BigNum operator</em>(const BigNum&amp;)const; //重载乘法运算符，两个大数之间的相乘运算<br>    BigNum operator/(const int&amp;)const; //重载除法运算符，大数对一个整数进行相除运算<br>    BigNum operator/(const long long&amp;)const; //重载除法运算符，大数对一个长整数进行相除运算<br>    int operator%(const int&amp;)const; //大数对一个int类型的变量进行取模运算<br>    long long operator%(const long long&amp;)const; //大数对一个long long类型的变量进行取模运算<br>    BigNum operator&amp;(const BigNum&amp;)const; //重载位与运算符，大数与大数进行与运算<br>    BigNum operator|(const BigNum&amp;)const; //重载位或运算符，大数与大数进行或运算<br>    BigNum operator^(const BigNum&amp;)const; //重载位异或运算符，大数与大数进行异或运算<br>    BigNum operator<del>()const; //重载取反运算符，大数自身取反运算<br>    bool operator&gt;(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&gt;)<br>    bool operator&gt;(const int&amp; t)const; //大数和一个int类型的变量的大小比较<br>    bool operator&lt;(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&lt;)<br>    bool operator&gt;=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&gt;=)<br>    bool operator&lt;=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&lt;=)<br>    bool operator==(const BigNum&amp; T)const; //大数和另一个大数的大小比较(==)<br>    bool operator!=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(!=)<br>    int&amp; operator[](int x) { return a[x]; } //重载下标运算符，返回大整数的对应位置的字节<br>    BigNum operator&lt;&lt;(const int&amp;)const; //重载左移运算符，大数进行算数左移<br>    BigNum operator&gt;&gt;(const int&amp;)const; //重载右移运算符，大数进行算数右移<br>    BigNum operator+=(const BigNum&amp;); //重载加法复合赋值运算符，两个大数之间的相加运算<br>    BigNum operator-=(const BigNum&amp;); //重载减法复合赋值运算符，两个大数之间的相减运算<br>    BigNum operator<em>=(const BigNum&amp;); //重载乘法复合赋值运算符，两个大数之间的相乘运算<br>    BigNum operator/=(const int&amp;); //重载除法复合赋值运算符，大数对一个整数进行相除运算<br>    BigNum operator%=(const int&amp;); //重载模运算复合赋值运算符，大数对一个整数进行取模运算<br>    BigNum operator&lt;&lt;=(const int&amp;); //重载左移赋值运算符，大数进行算数左移<br>    BigNum operator&gt;&gt;=(const int&amp;); //重载右移复制运算符，大数进行算数右移<br>    BigNum operator&amp;=(const BigNum&amp;); //重载位与运算符，大数与大数进行与运算<br>    BigNum operator|=(const BigNum&amp;); //重载位或运算符，大数与大数进行或运算<br>    BigNum operator^=(const BigNum&amp;); //重载位异或运算符，大数与大数进行异或运算<br>    BigNum &amp; operator++(); //重载前置自增运算符<br>    BigNum operator++(int); //重载后置自增运算符<br>    BigNum&amp; operator–(); //重载前置自减运算符<br>    BigNum operator–(int); //重载后置自减运算符<br>    operator string(); //重载string强制类型转换<br>    operator char</em>(); //重载char数组强制类型转换<br>};<br>vector<int> buma(BigNum t1) //将一个大数转换为vector形式的二进制数<br>{<br>    vector<int> x;<br>    while (t1 &gt;= 1) {<br>        x.push_back(t1 % 2);<br>        t1 /= 2;<br>    }<br>    if (t1.f == false) {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            x[i] = 1 - x[i];<br>        }<br>        x[0]++;<br>        for (int i = 0; i &lt; x.size() - 1; i++) {<br>            if (x[i] &gt; 1) {<br>                x[i] = 0;<br>                x[i + 1]++;<br>            }<br>        }<br>        if (x[x.size()-1] &gt; 1) {<br>            x[x.size()-1] = 0;<br>            x.push_back(1);<br>        }<br>    }<br>    if (t1.f == false) {<br>        x.push_back(1);<br>    }<br>    else {<br>        x.push_back(0);<br>    }<br>    return x;<br>}<br>BigNum::BigNum(const int b) //将一个int类型的变量转化成大数<br>{<br>    int c, d = b;<br>    len = 0;<br>    if (b &lt; 0) {<br>        f = 0;<br>        d = abs(b);<br>    }<br>    while (d &gt; 9) {<br>        c = d - (d / 10) * 10;<br>        d = d / 10;<br>        a.push_back(c);<br>        len++;<br>    }<br>    a.push_back(d);<br>    len++;<br>}<br>BigNum::BigNum(const char* s) //将一个char数组类型的变量转化为大数<br>{<br>    a.clear();<br>    int t, k, L, i;<br>    L = strlen(s);<br>    len = L;<br>    int flag = 0;<br>    if (s[0] == ‘+’) {<br>        flag = 1;<br>        len–;<br>    }<br>    if (s[0] == ‘-‘) {<br>        flag = 1;<br>        f = 0;<br>        len–;<br>    }<br>    for (i = L - 1; i &gt;= flag; i –)<br>    {<br>        t = 0;<br>        k = i;<br>        t = t * 10 + s[i] - ‘0’;<br>        a.push_back(t);<br>    }<br>}<br>BigNum::BigNum(const string s) //将一个string类型的变量转化为大数<br>{<br>    a.clear();<br>    int t, k, L, i;<br>    L = s.length();<br>    len = L;<br>    int flag = 0;<br>    if (s[0] == ‘+’) {<br>        flag = 1;<br>        len–;<br>    }<br>    if (s[0] == ‘-‘) {<br>        flag = 1;<br>        f = 0;<br>        len–;<br>    }<br>    for (i = L - 1; i &gt;= flag; i–)<br>    {<br>        t = 0;<br>        k = i;<br>        t = t * 10 + s[i] - ‘0’;<br>        a.push_back(t);<br>    }<br>}<br>BigNum::BigNum(const vector<int>v) //将一个vector类型的变量转化为大数<br>{<br>    len = v.size();<br>    for (int i = len - 1; i &gt;= 0; i–) {<br>        a.push_back(v[i]);<br>    }<br>    if (v[0] &lt; 0) {<br>        f = 0;<br>        a[len - 1] = abs(a[len - 1]);<br>    }<br>}<br>BigNum::BigNum(const BigNum&amp; T) :len(T.len) //拷贝构造函数<br>{<br>    int i;<br>    for (i = 0; i &lt; len; i++) {<br>        a.push_back(T.a[i]);<br>    }<br>    f = T.f;<br>}<br>BigNum&amp; BigNum::operator=(const BigNum&amp; n) //重载赋值运算符，大数之间赋值运算<br>{<br>    int i;<br>    len = n.len;<br>    f = n.f;<br>    vector<int>v(len);<br>    for (i = 0; i &lt; len; i++) {<br>        v[i] = n.a[i];<br>    }<br>    a = v;<br>    return <em>this;<br>}<br>istream&amp; operator&gt;&gt;(istream&amp; in, BigNum&amp; b) {<br>    b.a.clear();<br>    string ch;<br>    int i = -1;<br>    in &gt;&gt; ch;<br>    int flag = 0;<br>    int L = ch.length();<br>    if (ch[0] == ‘+’) {<br>        flag = 1;<br>    }<br>    if (ch[0] == ‘-‘) {<br>        flag = 1;<br>        b.f = 0;<br>    }<br>    int cnt = 0, sum = 0;<br>    for (i = L - 1; i &gt;= flag;i–) {<br>        sum = 0;<br>        sum += (ch[i] - ‘0’);<br>        b.a.push_back(sum);<br>        cnt++;<br>    }<br>    b.len = cnt++;<br>    return in;<br>}<br>ostream&amp; operator&lt;&lt;(ostream&amp; out, BigNum&amp; b) //重载输出运算符<br>{<br>    int i;<br>    if (b.f) {<br>        cout &lt;&lt; b.a[b.len - 1];<br>        for (i = b.len - 2; i &gt;= 0; i–) {<br>            printf(“%d”, b.a[i]);<br>        }<br>    }<br>    else {<br>        cout &lt;&lt; “-“;<br>        cout &lt;&lt; b.a[b.len - 1];<br>        for (i = b.len - 2; i &gt;= 0; i–) {<br>            printf(“%d”, b.a[i]);<br>        }<br>    }<br>    return out;<br>}<br>void BigNum::print() //输出大数<br>{<br>    int i;<br>    if (f) {<br>        printf(“%d”, a[len - 1]);<br>        for (i = len - 2; i &gt;= 0; i–)<br>            printf(“%d”, a[i]);<br>    }<br>    else {<br>        cout &lt;&lt; “-“;<br>        printf(“%d”, a[len - 1]);<br>        for (i = len - 2; i &gt;= 0; i–)<br>            printf(“%d”, a[i]);<br>    }<br>    printf(“\n”);<br>}<br>BigNum BigNum::operator+(const BigNum&amp; T)const //两个大数相加<br>{<br>    BigNum t(<em>this);<br>    BigNum a(</em>this);<br>    BigNum b(T);<br>    if (a.f == false &amp;&amp; b.f == true) {<br>        a.f = 1;<br>        return b - a;<br>    }<br>    if (a.f == true &amp;&amp; b.f == false) {<br>        b.f = 1;<br>        return a - b;<br>    }<br>    if (a.f == false &amp;&amp; b.f == false) {<br>        t.f = 0;<br>    }<br>    const int big = max(T.len, len);<br>    vector<int>v(big+1);<br>    for (int i = 0; i &lt; big; i++) {<br>        if (i &lt; len)<br>            v[i] += a[i];<br>        if (i &lt; T.len)<br>            v[i] += T.a[i];<br>        if (v[i] &gt; 9)<br>        {<br>            v[i + 1]++;<br>            v[i] -= 10;<br>        }<br>    }<br>    if (v[big] != 0) {<br>        t.len = big + 1;<br>    }<br>    else {<br>        t.len = big;<br>    }<br>    t.a = v;<br>    return t;<br>}<br>BigNum BigNum::operator-(const BigNum&amp; T) const //重载减法运算符，两个大数之间的相减运算<br>{<br>    BigNum t(<em>this);<br>    BigNum a(</em>this);<br>    BigNum b(T);<br>    if (a.f == false &amp;&amp; b.f == true) {<br>        b.f = 0;<br>        return a + b;<br>    }<br>    if (a.f == true &amp;&amp; b.f == false) {<br>        b.f = 1;<br>        return a + b;<br>    }<br>    int big = max(T.len, len);<br>    vector<int>x;<br>    vector<int>y;<br>    vector<int>z(big);<br>    bool flag;<br>    if (*this &gt;= T) {<br>        x = t.a;<br>        y = T.a;<br>        flag = 0;<br>    }<br>    else {<br>        x = T.a;<br>        y = t.a;<br>        flag = 1;<br>    }<br>    for (int i = 0; i &lt; big; i++)<br>    {<br>        z[i] += x[i];<br>        if (i &lt; y.size())<br>            z[i] -= y[i];<br>        if (z[i] &lt; 0)<br>        {<br>            z[i] += 10;<br>            z[i + 1]–;<br>        }<br>    }<br>    while (big &gt; 1 &amp;&amp; !z.back())<br>    {<br>        big–;<br>        z.pop_back();<br>    }<br>    if (flag) {<br>        t.f = 0;<br>    }<br>    t.a = z;<br>    t.len = big;<br>    if (a.f == false &amp;&amp; b.f == false) {<br>        t.f = !t.f;<br>    }<br>    return t;<br>}<br>BigNum BigNum::operator</em>(const BigNum&amp; T)const //两个大数之间的相乘<br>{<br>    BigNum t(<em>this);<br>    vector<int>v(len+T.len);<br>    for (int i = 0; i &lt; len; i++) {<br>        for (int j = 0; j &lt; T.len; j++) {<br>            v[i + j] += a[i] * T.a[j];<br>        }<br>    }<br>    for (int i = 0; i &lt; len + T.len; i++) {<br>        if (v[i] &gt; 9) {<br>            v[i + 1] += v[i] / 10;<br>            v[i] %= 10;<br>        }<br>    }<br>    while (v.size() &gt; 1 &amp;&amp; !v.back()) {<br>        v.pop_back();<br>    }<br>    t.a = v;<br>    t.len = v.size();<br>    return t;<br>}<br>BigNum BigNum::operator/(const int&amp; b)const //大数对一个整数进行相除运算<br>{<br>    vector<int>v(len);<br>    int i, down = 0;<br>    for (i = len - 1; i &gt;= 0; i–)<br>    {<br>        v[i] = (a[i] + down * 10) / b;<br>        down = a[i] + down * 10 - v[i] * b;<br>    }<br>    BigNum ans;<br>    ans.len = len;<br>    ans.f = f;<br>    while (v[ans.len - 1] == 0 &amp;&amp; ans.len &gt; 1) {<br>        ans.len–;<br>    }<br>    ans.a = v;<br>    return ans;<br>}<br>BigNum BigNum::operator/(const long long&amp; b)const //大数对一个长整数进行相除运算<br>{<br>    vector<int>v(len);<br>    long long i, down = 0;<br>    for (i = len - 1; i &gt;= 0; i–)<br>    {<br>        v[i] = (a[i] + down * 10) / b;<br>        down = a[i] + down * 10 - v[i] * b;<br>    }<br>    BigNum ans;<br>    ans.len = len;<br>    ans.f = f;<br>    while (v[ans.len - 1] == 0 &amp;&amp; ans.len &gt; 1) {<br>        ans.len–;<br>    }<br>    ans.a = v;<br>    return ans;<br>}<br>int BigNum::operator%(const int&amp; b)const //大数对一个 int类型的变量进行取模<br>{<br>    int i, d = 0;<br>    for (i = len - 1; i &gt;= 0; i–)<br>        d = ((d * 10) % b + a[i]) % b;<br>    return d;<br>}<br>long long BigNum::operator%(const long long&amp; b)const //大数对一个long long类型的变量进行取模<br>{<br>    long long i, d = 0;<br>    for (i = len - 1; i &gt;= 0; i–)<br>        d = ((d * 10) % b + a[i]) % b;<br>    return d;<br>}<br>BigNum BigNum::operator&amp;(const BigNum&amp; T) const //重载位与运算符，大数与大数进行与运算<br>{<br>    BigNum t(</em>this);<br>    vector<int>x;<br>    vector<int>y;<br>    vector<int>z;<br>    BigNum ans = 0;<br>    ans.f = !(!(t.f) &amp; !(T.f));<br>    x = buma(t);<br>    y = buma(T);<br>    if (x.size() &gt;= y.size()) {<br>        int i;<br>        for (i = 0; i &lt; y.size(); i++) {<br>            x[i] = x[i] &amp; y[i];<br>        }<br>        for (; i &lt; x.size(); i++) {<br>            if (T.f) {<br>                y.push_back(0);<br>                x[i] = x[i] &amp; y[i];<br>            }<br>            else {<br>                y.push_back(1);<br>                x[i] = x[i] &amp; y[i];<br>            }<br>        }<br>    }else{<br>        int i;<br>        for (i = 0; i &lt; x.size();i++) {<br>            x[i] = x[i] &amp; y[i];<br>        }<br>        for (; i &lt; y.size();i++) {<br>            if (t.f) {<br>                x.push_back(0);<br>                x[i] = x[i] &amp; y[i];<br>            }<br>            else {<br>                x.push_back(1);<br>                x[i] = x[i] &amp; y[i];<br>            }<br>        }<br>    }<br>    if (ans.f == false) {<br>        if (x[0] == 1) {<br>            x[0] = 0;<br>        }else {<br>            x[0] = 1;<br>            int i = 1;<br>            while (x[i] == 0) {<br>                x[i] = 1;<br>                i++;<br>            }<br>            x[i] = 0;<br>        }<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            x[i] = 1 - x[i];<br>        }<br>    }<br>    BigNum tmp = 1;<br>    if (ans.f == false) {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans -= tmp * x[i];<br>            tmp <em>= 2;<br>        }<br>    }<br>    else {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans += tmp * x[i];<br>            tmp *= 2;<br>        }<br>    }<br>    ans.len = ans.a.size();<br>    return ans;<br>}<br>BigNum BigNum::operator|(const BigNum&amp; T) const //重载位或运算符，大数与大数进行或运算<br>{<br>    BigNum t(</em>this);<br>    vector<int>x;<br>    vector<int>y;<br>    vector<int>z;<br>    BigNum ans = 0;<br>    ans.f = !(!(t.f) | !(T.f));<br>    x = buma(t);<br>    y = buma(T);<br>    if (x.size() &gt;= y.size()) {<br>        int i;<br>        for (i = 0; i &lt; y.size(); i++) {<br>            x[i] = x[i] | y[i];<br>        }<br>        for (; i &lt; x.size(); i++) {<br>            if (T.f) {<br>                y.push_back(0);<br>                x[i] = x[i] | y[i];<br>            }<br>            else {<br>                y.push_back(1);<br>                x[i] = x[i] | y[i];<br>            }<br>        }<br>    }<br>    else {<br>        int i;<br>        for (i = 0; i &lt; x.size(); i++) {<br>            x[i] = x[i] | y[i];<br>        }<br>        for (; i &lt; y.size(); i++) {<br>            if (t.f) {<br>                x.push_back(0);<br>                x[i] = x[i] | y[i];<br>            }<br>            else {<br>                x.push_back(1);<br>                x[i] = x[i] | y[i];<br>            }<br>        }<br>    }<br>    if (ans.f == false) {<br>        if (x[0] == 1) {<br>            x[0] = 0;<br>        }<br>        else {<br>            x[0] = 1;<br>            int i = 1;<br>            while (x[i] == 0) {<br>                x[i] = 1;<br>                i++;<br>            }<br>            x[i] = 0;<br>        }<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            x[i] = 1 - x[i];<br>        }<br>    }<br>    BigNum tmp = 1;<br>    if (ans.f == false) {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans -= tmp * x[i];<br>            tmp <em>= 2;<br>        }<br>    }<br>    else {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans += tmp * x[i];<br>            tmp *= 2;<br>        }<br>    }<br>    ans.len = ans.a.size();<br>    return ans;<br>}<br>BigNum BigNum::operator^(const BigNum&amp; T) const //重载位异或运算符，大数与大数进行异或运算<br>{<br>    BigNum t(</em>this);<br>    vector<int>x;<br>    vector<int>y;<br>    vector<int>z;<br>    BigNum ans = 0;<br>    ans.f = !(!(t.f) ^ !(T.f));<br>    x = buma(t);<br>    y = buma(T);<br>    if (x.size() &gt;= y.size()) {<br>        int i;<br>        for (i = 0; i &lt; y.size(); i++) {<br>            x[i] = x[i] ^ y[i];<br>        }<br>        for (; i &lt; x.size(); i++) {<br>            if (T.f) {<br>                y.push_back(0);<br>                x[i] = x[i] ^ y[i];<br>            }<br>            else {<br>                y.push_back(1);<br>                x[i] = x[i] ^ y[i];<br>            }<br>        }<br>    }<br>    else {<br>        int i;<br>        for (i = 0; i &lt; x.size(); i++) {<br>            x[i] = x[i] ^ y[i];<br>        }<br>        for (; i &lt; y.size(); i++) {<br>            if (t.f) {<br>                x.push_back(0);<br>                x[i] = x[i] ^ y[i];<br>            }<br>            else {<br>                x.push_back(1);<br>                x[i] = x[i] ^ y[i];<br>            }<br>        }<br>    }<br>    if (ans.f == false) {<br>        if (x[0] == 1) {<br>            x[0] = 0;<br>        }<br>        else {<br>            x[0] = 1;<br>            int i = 1;<br>            while (x[i] == 0) {<br>                x[i] = 1;<br>                i++;<br>            }<br>            x[i] = 0;<br>        }<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            x[i] = 1 - x[i];<br>        }<br>    }<br>    BigNum tmp = 1;<br>    if (ans.f == false) {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans -= tmp * x[i];<br>            tmp *= 2;<br>        }<br>    }<br>    else {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans += tmp * x[i];<br>            tmp *= 2;<br>        }<br>    }<br>    ans.len = ans.a.size();<br>    return ans;<br>}<br>BigNum BigNum::operator</del>() const //重载取反运算符，大数自身取反运算<br>{<br>    vector<int> x = buma(<em>this);<br>    BigNum ans=0;<br>    ans.f = !f;<br>    for (int i = 0; i &lt; x.size();i++) {<br>        x[i] = 1 - x[i];<br>    }<br>    if (ans.f == false) {<br>        if (x[0] == 1) {<br>            x[0] = 0;<br>        }<br>        else {<br>            x[0] = 1;<br>            int i = 1;<br>            while (x[i] == 0) {<br>                x[i] = 1;<br>                i++;<br>            }<br>            x[i] = 0;<br>        }<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            x[i] = 1 - x[i];<br>        }<br>    }<br>    BigNum tmp = 1;<br>    if (ans.f == false) {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans -= tmp * x[i];<br>            tmp <em>= 2;<br>        }<br>    }<br>    else {<br>        for (int i = 0; i &lt; x.size(); i++) {<br>            ans += tmp * x[i];<br>            tmp *= 2;<br>        }<br>    }<br>    ans.len = ans.a.size();<br>    return ans;<br>}<br>bool BigNum::operator&gt;(const BigNum&amp; T)const //大数和另一个大数的大小比较(&gt;)<br>{<br>    int ln;<br>    if (len &gt; T.len)return true;<br>    else if (len == T.len)<br>    {<br>        ln = len - 1;<br>        while (ln &gt;= 0 &amp;&amp; a[ln] == T.a[ln])<br>            ln–;<br>        if (ln &gt;= 0 &amp;&amp; a[ln] &gt; T.a[ln])<br>            return true;<br>        else<br>            return false;<br>    }<br>    else<br>        return false;<br>}<br>bool BigNum::operator&gt;(const int&amp; t)const //大数和一个int类型的变量的大小比较<br>{<br>    BigNum b(t);<br>    return *this &gt; b;<br>}<br>bool BigNum::operator&lt;(const BigNum&amp; T)const //大数和另一个大数的大小比较(&lt;)<br>{<br>    int ln;<br>    if (len &lt; T.len)return true;<br>    else if (len == T.len)<br>    {<br>        ln = len - 1;<br>        while (ln &gt;= 0 &amp;&amp; a[ln] == T.a[ln])<br>            ln–;<br>        if (ln &gt;= 0 &amp;&amp; a[ln] &lt; T.a[ln])<br>            return true;<br>        else<br>            return false;<br>    }<br>    else<br>        return false;<br>}<br>bool BigNum::operator&gt;=(const BigNum&amp; T)const //大数和另一个大数的大小比较(&gt;=)<br>{<br>    return !(</em>this &lt; T);<br>}<br>bool BigNum::operator&lt;=(const BigNum&amp; T)const //大数和另一个大数的大小比较(&lt;)<br>{<br>    return !(<em>this &gt; T);<br>}<br>bool BigNum::operator==(const BigNum&amp; T)const //大数和另一个大数的大小比较(==)<br>{<br>    int ln;<br>    if (len != T.len)return false;<br>    else if (len == T.len)<br>    {<br>        ln = len - 1;<br>        for (int i = ln; i &gt;= 0; i–) {<br>            if (a[i] != T.a[i]) {<br>                return false;<br>            }<br>        }<br>    }<br>    else<br>        return true;<br>}<br>bool BigNum::operator!=(const BigNum&amp; T)const //大数和另一个大数的大小比较(!=)<br>{<br>    return !(</em>this == T);<br>}<br>BigNum BigNum::operator&lt;&lt;(const int&amp; t)const //重载左移运算符，大数进行算数左移<br>{<br>    BigNum T(<em>this);<br>    for (int i = t; i &gt; 0; i–) {<br>        T *=2;<br>    }<br>    return T;<br>}<br>BigNum BigNum::operator&gt;&gt;(const int&amp; t)const //重载右移运算符，大数进行算数右移<br>{<br>    BigNum T(</em>this);<br>    for (int i = t; i &gt; 0; i–) {<br>        T = T / 2;<br>    }<br>    return T;<br>}<br>BigNum BigNum::operator+=(const BigNum&amp; T) //重载加法复合赋值运算符，两个大数之间的相加运算<br>{<br>    return *this = *this + T;<br>}<br>BigNum BigNum::operator-=(const BigNum&amp; T) //重载减法复合赋值运算符，两个大数之间的相减运算<br>{<br>    return *this = *this - T;<br>}<br>BigNum BigNum::operator</em>=(const BigNum&amp; T) //重载乘法复合赋值运算符，两个大数之间的相乘运算<br>{<br>    return <em>this = <em>this * T;<br>}<br>BigNum BigNum::operator/=(const int&amp; T) //重载除法复合赋值运算符，大数对一个整数进行相除运算<br>{<br>    return *this = *this / T;<br>}<br>BigNum BigNum::operator%=(const int&amp; T) //重载模运算复合赋值运算符，大数对一个整数进行取模运算<br>{<br>    return *this = *this % T;<br>}<br>BigNum BigNum::operator&lt;&lt;=(const int&amp; T) //重载左移赋值运算符，大数进行算术左移<br>{<br>    return *this = *this &lt;&lt; T;<br>}<br>BigNum BigNum::operator&gt;&gt;=(const int&amp; T) //重载右移赋值运算符，大数进行算术右移<br>{<br>    return *this = *this &gt;&gt; T;<br>}<br>BigNum BigNum::operator&amp;=(const BigNum&amp; T) //重载位与运算符，大数与大数进行与运算<br>{<br>    return *this = *this &amp; T;<br>}<br>BigNum BigNum::operator|=(const BigNum&amp; T) //重载位或运算符，大数与大数进行或运算<br>{<br>    return *this = *this | T;<br>}<br>BigNum BigNum::operator^=(const BigNum&amp; T) //重载位异或运算符，大数与大数进行异或运算<br>{<br>    return *this = *this ^ T;<br>}<br>BigNum&amp; BigNum::operator++() //重载前置自增运算符<br>{<br>    *this += 1;<br>    return *this;<br>}<br>BigNum BigNum::operator++(int) //重载后置自增运算符<br>{<br>    BigNum ans = *this;<br>    ++(</em>this);<br>    return ans;<br>}<br>BigNum&amp; BigNum::operator–() //重载前置自减运算符<br>{<br>    <em>this -=1;<br>    return *this;<br>}<br>BigNum BigNum::operator–(int) //重载后置自减运算符<br>{<br>    BigNum ans = *this;<br>    –(</em>this);<br>    return ans;<br>}<br>BigNum::operator string() //重载string强制类型转换<br>{<br>    string s = “”;<br>    for (int i = len - 1; i &gt;= 0; i–) {<br>        char tmp = (char)a[i]+’0’;<br>        s = s + tmp;<br>    }<br>    return s;<br>}<br>char ss[500];<br>BigNum::operator char</em>() //重载char数组强制类型转换<br>{<br>    int k = 0;<br>    if (f == false) {<br>        ss[k] = ‘-‘;<br>        k++;<br>    }<br>    for (int i = len - 1; i &gt;= 0; i–) {<br>        char tmp = (char)a[i] + ‘0’;<br>        ss[k] = { tmp };<br>        k++;<br>    }<br>    return ss;<br>}</p>
-<p>int main() {<br>    BigNum A = 5;<br>    int flag = 0;<br>    for (int i = 2; A / 2 &gt; i; i++) {<br>        if (A % i == 0) {<br>            flag = 1;<br>            break;<br>        }<br>    }<br>    if (flag) {<br>        cout &lt;&lt; A &lt;&lt; “不是素数” &lt;&lt; endl;<br>    }<br>    else {<br>        cout &lt;&lt; A &lt;&lt; “是素数” &lt;&lt; endl;<br>    }</p>
-<pre><code>BigNum B = 524287;
-flag = 0;
-BigNum k = B / 2;
-for (long long i = 2; k &gt; i; i++) {
-    if (B % i == 0) {
+              <pre><code class="bash">#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+#include &lt;vector&gt;
+#define max(a, b)  (((a) &gt; (b)) ? (a) : (b))
+using namespace std;
+class BigNum {
+public:
+    vector&lt;int&gt;a;
+    int len;
+    bool f = 1;
+    BigNum() { len = 1; f = 1; }
+    BigNum(const int); //将一个int类型的变量转化成大数
+    BigNum(const char*); //将一个char数组类型的变量转化为大数
+    BigNum(const string); //将一个string类型的变量转化为大数
+    BigNum(const vector&lt;int&gt;); //将一个vector类型的变量转化为大数
+    BigNum(const BigNum&amp;); //拷贝构造函数
+    BigNum&amp; operator=(const BigNum&amp;); //重载赋值运算符，大数之间进行赋值运算
+    friend istream&amp; operator&gt;&gt;(istream&amp;, BigNum&amp;); //重载输入运算符
+    friend ostream&amp; operator&lt;&lt;(ostream&amp;, BigNum&amp;); //重载输出运算符
+    void print(); //输出大数
+    BigNum operator+(const BigNum&amp;)const; //重载加法运算符，两个大数之间的相加运算
+    BigNum operator-(const BigNum&amp;)const; //重载减法运算符，两个大数之间的相减运算
+    BigNum operator*(const BigNum&amp;)const; //重载乘法运算符，两个大数之间的相乘运算
+    BigNum operator/(const int&amp;)const; //重载除法运算符，大数对一个整数进行相除运算
+    BigNum operator/(const long long&amp;)const; //重载除法运算符，大数对一个长整数进行相除运算
+    int operator%(const int&amp;)const; //大数对一个int类型的变量进行取模运算
+    long long operator%(const long long&amp;)const; //大数对一个long long类型的变量进行取模运算
+    BigNum operator&amp;(const BigNum&amp;)const; //重载位与运算符，大数与大数进行与运算
+    BigNum operator|(const BigNum&amp;)const; //重载位或运算符，大数与大数进行或运算
+    BigNum operator^(const BigNum&amp;)const; //重载位异或运算符，大数与大数进行异或运算
+    BigNum operator~()const; //重载取反运算符，大数自身取反运算
+    bool operator&gt;(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&gt;)  
+    bool operator&gt;(const int&amp; t)const; //大数和一个int类型的变量的大小比较
+    bool operator&lt;(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&lt;)
+    bool operator&gt;=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&gt;=)
+    bool operator&lt;=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(&lt;=)
+    bool operator==(const BigNum&amp; T)const; //大数和另一个大数的大小比较(==)
+    bool operator!=(const BigNum&amp; T)const; //大数和另一个大数的大小比较(!=)
+    int&amp; operator[](int x) { return a[x]; } //重载下标运算符，返回大整数的对应位置的字节
+    BigNum operator&lt;&lt;(const int&amp;)const; //重载左移运算符，大数进行算数左移
+    BigNum operator&gt;&gt;(const int&amp;)const; //重载右移运算符，大数进行算数右移
+    BigNum operator+=(const BigNum&amp;); //重载加法复合赋值运算符，两个大数之间的相加运算
+    BigNum operator-=(const BigNum&amp;); //重载减法复合赋值运算符，两个大数之间的相减运算
+    BigNum operator*=(const BigNum&amp;); //重载乘法复合赋值运算符，两个大数之间的相乘运算
+    BigNum operator/=(const int&amp;); //重载除法复合赋值运算符，大数对一个整数进行相除运算
+    BigNum operator%=(const int&amp;); //重载模运算复合赋值运算符，大数对一个整数进行取模运算
+    BigNum operator&lt;&lt;=(const int&amp;); //重载左移赋值运算符，大数进行算数左移
+    BigNum operator&gt;&gt;=(const int&amp;); //重载右移复制运算符，大数进行算数右移
+    BigNum operator&amp;=(const BigNum&amp;); //重载位与运算符，大数与大数进行与运算
+    BigNum operator|=(const BigNum&amp;); //重载位或运算符，大数与大数进行或运算
+    BigNum operator^=(const BigNum&amp;); //重载位异或运算符，大数与大数进行异或运算
+    BigNum &amp; operator++(); //重载前置自增运算符
+    BigNum operator++(int); //重载后置自增运算符
+    BigNum&amp; operator--(); //重载前置自减运算符
+    BigNum operator--(int); //重载后置自减运算符
+    operator string(); //重载string强制类型转换
+    operator char*(); //重载char数组强制类型转换
+};
+vector&lt;int&gt; buma(BigNum t1) //将一个大数转换为vector形式的二进制数
+{
+    vector&lt;int&gt; x;
+    while (t1 &gt;= 1) {
+        x.push_back(t1 % 2);
+        t1 /= 2;
+    }
+    if (t1.f == false) {
+        for (int i = 0; i &lt; x.size(); i++) {
+            x[i] = 1 - x[i];
+        }
+        x[0]++;
+        for (int i = 0; i &lt; x.size() - 1; i++) {
+            if (x[i] &gt; 1) {
+                x[i] = 0;
+                x[i + 1]++;
+            }
+        }
+        if (x[x.size()-1] &gt; 1) {
+            x[x.size()-1] = 0;
+            x.push_back(1);
+        }
+    }
+    if (t1.f == false) {
+        x.push_back(1);
+    }
+    else {
+        x.push_back(0);
+    }
+    return x;
+}
+BigNum::BigNum(const int b) //将一个int类型的变量转化成大数
+{
+    int c, d = b;
+    len = 0;
+    if (b &lt; 0) {
+        f = 0;
+        d = abs(b);
+    }
+    while (d &gt; 9) {
+        c = d - (d / 10) * 10;
+        d = d / 10;
+        a.push_back(c);
+        len++;
+    }
+    a.push_back(d);
+    len++;
+}
+BigNum::BigNum(const char* s) //将一个char数组类型的变量转化为大数
+{
+    a.clear();
+    int t, k, L, i;
+    L = strlen(s);
+    len = L;
+    int flag = 0;
+    if (s[0] == &#39;+&#39;) {
         flag = 1;
-        break;
+        len--;
+    }
+    if (s[0] == &#39;-&#39;) {
+        flag = 1;
+        f = 0;
+        len--;
+    }
+    for (i = L - 1; i &gt;= flag; i --)
+    {
+        t = 0;
+        k = i;
+        t = t * 10 + s[i] - &#39;0&#39;;
+        a.push_back(t);
     }
 }
-if (flag) {
-    cout &lt;&lt; B &lt;&lt; &quot;不是素数&quot; &lt;&lt; endl;
+BigNum::BigNum(const string s) //将一个string类型的变量转化为大数
+{
+    a.clear();
+    int t, k, L, i;
+    L = s.length();
+    len = L;
+    int flag = 0;
+    if (s[0] == &#39;+&#39;) {
+        flag = 1;
+        len--;
+    }
+    if (s[0] == &#39;-&#39;) {
+        flag = 1;
+        f = 0;
+        len--;
+    }
+    for (i = L - 1; i &gt;= flag; i--)
+    {
+        t = 0;
+        k = i;
+        t = t * 10 + s[i] - &#39;0&#39;;
+        a.push_back(t);
+    }
 }
-else {
-    cout &lt;&lt; B &lt;&lt; &quot;是素数&quot; &lt;&lt; endl;
+BigNum::BigNum(const vector&lt;int&gt;v) //将一个vector类型的变量转化为大数
+{
+    len = v.size();
+    for (int i = len - 1; i &gt;= 0; i--) {
+        a.push_back(v[i]);
+    }
+    if (v[0] &lt; 0) {
+        f = 0;
+        a[len - 1] = abs(a[len - 1]);
+    }
+}
+BigNum::BigNum(const BigNum&amp; T) :len(T.len) //拷贝构造函数
+{
+    int i;
+    for (i = 0; i &lt; len; i++) {
+        a.push_back(T.a[i]);
+    }
+    f = T.f;
+}
+BigNum&amp; BigNum::operator=(const BigNum&amp; n) //重载赋值运算符，大数之间赋值运算
+{
+    int i;
+    len = n.len;
+    f = n.f;
+    vector&lt;int&gt;v(len);
+    for (i = 0; i &lt; len; i++) {
+        v[i] = n.a[i];
+    }
+    a = v;
+    return *this;
+}
+istream&amp; operator&gt;&gt;(istream&amp; in, BigNum&amp; b) {
+    b.a.clear();
+    string ch;
+    int i = -1;
+    in &gt;&gt; ch;
+    int flag = 0;
+    int L = ch.length();
+    if (ch[0] == &#39;+&#39;) {
+        flag = 1;
+    }
+    if (ch[0] == &#39;-&#39;) {
+        flag = 1;
+        b.f = 0;
+    }
+    int cnt = 0, sum = 0;
+    for (i = L - 1; i &gt;= flag;i--) {
+        sum = 0;
+        sum += (ch[i] - &#39;0&#39;);
+        b.a.push_back(sum);
+        cnt++;
+    }
+    b.len = cnt++;
+    return in;
+}
+ostream&amp; operator&lt;&lt;(ostream&amp; out, BigNum&amp; b) //重载输出运算符
+{
+    int i;
+    if (b.f) {
+        cout &lt;&lt; b.a[b.len - 1];
+        for (i = b.len - 2; i &gt;= 0; i--) {
+            printf(&quot;%d&quot;, b.a[i]);
+        }
+    }
+    else {
+        cout &lt;&lt; &quot;-&quot;;
+        cout &lt;&lt; b.a[b.len - 1];
+        for (i = b.len - 2; i &gt;= 0; i--) {
+            printf(&quot;%d&quot;, b.a[i]);
+        }
+    }
+    return out;
+}
+void BigNum::print() //输出大数
+{
+    int i;
+    if (f) {
+        printf(&quot;%d&quot;, a[len - 1]);
+        for (i = len - 2; i &gt;= 0; i--)
+            printf(&quot;%d&quot;, a[i]);
+    }
+    else {
+        cout &lt;&lt; &quot;-&quot;;
+        printf(&quot;%d&quot;, a[len - 1]);
+        for (i = len - 2; i &gt;= 0; i--)
+            printf(&quot;%d&quot;, a[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+BigNum BigNum::operator+(const BigNum&amp; T)const //两个大数相加
+{
+    BigNum t(*this);
+    BigNum a(*this);
+    BigNum b(T);
+    if (a.f == false &amp;&amp; b.f == true) {
+        a.f = 1;
+        return b - a;
+    }
+    if (a.f == true &amp;&amp; b.f == false) {
+        b.f = 1;
+        return a - b;
+    }
+    if (a.f == false &amp;&amp; b.f == false) {
+        t.f = 0;
+    }
+    const int big = max(T.len, len);
+    vector&lt;int&gt;v(big+1);
+    for (int i = 0; i &lt; big; i++) {
+        if (i &lt; len)
+            v[i] += a[i];
+        if (i &lt; T.len)
+            v[i] += T.a[i];
+        if (v[i] &gt; 9)
+        {
+            v[i + 1]++;
+            v[i] -= 10;
+        }
+    }
+    if (v[big] != 0) {
+        t.len = big + 1;
+    }
+    else {
+        t.len = big;
+    }
+    t.a = v;
+    return t;
+}
+BigNum BigNum::operator-(const BigNum&amp; T) const //重载减法运算符，两个大数之间的相减运算
+{
+    BigNum t(*this);
+    BigNum a(*this);
+    BigNum b(T);
+    if (a.f == false &amp;&amp; b.f == true) {
+        b.f = 0;
+        return a + b;
+    }
+    if (a.f == true &amp;&amp; b.f == false) {
+        b.f = 1;
+        return a + b;
+    }
+    int big = max(T.len, len);
+    vector&lt;int&gt;x;
+    vector&lt;int&gt;y;
+    vector&lt;int&gt;z(big);
+    bool flag;
+    if (*this &gt;= T) {
+        x = t.a;
+        y = T.a;
+        flag = 0;
+    }
+    else {
+        x = T.a;
+        y = t.a;
+        flag = 1;
+    }
+    for (int i = 0; i &lt; big; i++)
+    {
+        z[i] += x[i];
+        if (i &lt; y.size())
+            z[i] -= y[i];
+        if (z[i] &lt; 0)
+        {
+            z[i] += 10;
+            z[i + 1]--;
+        }
+    }
+    while (big &gt; 1 &amp;&amp; !z.back())
+    {
+        big--;
+        z.pop_back();
+    }
+    if (flag) {
+        t.f = 0;
+    }
+    t.a = z;
+    t.len = big;
+    if (a.f == false &amp;&amp; b.f == false) {
+        t.f = !t.f;
+    }
+    return t;
+}
+BigNum BigNum::operator*(const BigNum&amp; T)const //两个大数之间的相乘
+{
+    BigNum t(*this);
+    vector&lt;int&gt;v(len+T.len);
+    for (int i = 0; i &lt; len; i++) {
+        for (int j = 0; j &lt; T.len; j++) {
+            v[i + j] += a[i] * T.a[j];
+        }
+    }
+    for (int i = 0; i &lt; len + T.len; i++) {
+        if (v[i] &gt; 9) {
+            v[i + 1] += v[i] / 10;
+            v[i] %= 10;
+        }
+    }
+    while (v.size() &gt; 1 &amp;&amp; !v.back()) {
+        v.pop_back();
+    }
+    t.a = v;
+    t.len = v.size();
+    return t;
+}
+BigNum BigNum::operator/(const int&amp; b)const //大数对一个整数进行相除运算
+{
+    vector&lt;int&gt;v(len);
+    int i, down = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+    {
+        v[i] = (a[i] + down * 10) / b;
+        down = a[i] + down * 10 - v[i] * b;
+    }
+    BigNum ans;
+    ans.len = len;
+    ans.f = f;
+    while (v[ans.len - 1] == 0 &amp;&amp; ans.len &gt; 1) {
+        ans.len--;
+    }
+    ans.a = v;
+    return ans;
+}
+BigNum BigNum::operator/(const long long&amp; b)const //大数对一个长整数进行相除运算
+{
+    vector&lt;int&gt;v(len);
+    long long i, down = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+    {
+        v[i] = (a[i] + down * 10) / b;
+        down = a[i] + down * 10 - v[i] * b;
+    }
+    BigNum ans;
+    ans.len = len;
+    ans.f = f;
+    while (v[ans.len - 1] == 0 &amp;&amp; ans.len &gt; 1) {
+        ans.len--;
+    }
+    ans.a = v;
+    return ans;
+}
+int BigNum::operator%(const int&amp; b)const //大数对一个 int类型的变量进行取模
+{
+    int i, d = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+        d = ((d * 10) % b + a[i]) % b;
+    return d;
+}
+long long BigNum::operator%(const long long&amp; b)const //大数对一个long long类型的变量进行取模
+{
+    long long i, d = 0;
+    for (i = len - 1; i &gt;= 0; i--)
+        d = ((d * 10) % b + a[i]) % b;
+    return d;
+}
+BigNum BigNum::operator&amp;(const BigNum&amp; T) const //重载位与运算符，大数与大数进行与运算
+{
+    BigNum t(*this);
+    vector&lt;int&gt;x;
+    vector&lt;int&gt;y;
+    vector&lt;int&gt;z;
+    BigNum ans = 0;
+    ans.f = !(!(t.f) &amp; !(T.f));
+    x = buma(t);
+    y = buma(T);
+    if (x.size() &gt;= y.size()) {
+        int i;
+        for (i = 0; i &lt; y.size(); i++) {
+            x[i] = x[i] &amp; y[i];
+        }
+        for (; i &lt; x.size(); i++) {
+            if (T.f) {
+                y.push_back(0);
+                x[i] = x[i] &amp; y[i];
+            }
+            else {
+                y.push_back(1);
+                x[i] = x[i] &amp; y[i];
+            }
+        }
+    }else{
+        int i;
+        for (i = 0; i &lt; x.size();i++) {
+            x[i] = x[i] &amp; y[i];
+        }
+        for (; i &lt; y.size();i++) {
+            if (t.f) {
+                x.push_back(0);
+                x[i] = x[i] &amp; y[i];
+            }
+            else {
+                x.push_back(1);
+                x[i] = x[i] &amp; y[i];
+            }
+        }
+    }
+    if (ans.f == false) {
+        if (x[0] == 1) {
+            x[0] = 0;
+        }else {
+            x[0] = 1;
+            int i = 1;
+            while (x[i] == 0) {
+                x[i] = 1;
+                i++;
+            }
+            x[i] = 0;
+        }
+        for (int i = 0; i &lt; x.size(); i++) {
+            x[i] = 1 - x[i];
+        }
+    }
+    BigNum tmp = 1;
+    if (ans.f == false) {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans -= tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    else {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans += tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    ans.len = ans.a.size();
+    return ans;
+}
+BigNum BigNum::operator|(const BigNum&amp; T) const //重载位或运算符，大数与大数进行或运算
+{
+    BigNum t(*this);
+    vector&lt;int&gt;x;
+    vector&lt;int&gt;y;
+    vector&lt;int&gt;z;
+    BigNum ans = 0;
+    ans.f = !(!(t.f) | !(T.f));
+    x = buma(t);
+    y = buma(T);
+    if (x.size() &gt;= y.size()) {
+        int i;
+        for (i = 0; i &lt; y.size(); i++) {
+            x[i] = x[i] | y[i];
+        }
+        for (; i &lt; x.size(); i++) {
+            if (T.f) {
+                y.push_back(0);
+                x[i] = x[i] | y[i];
+            }
+            else {
+                y.push_back(1);
+                x[i] = x[i] | y[i];
+            }
+        }
+    }
+    else {
+        int i;
+        for (i = 0; i &lt; x.size(); i++) {
+            x[i] = x[i] | y[i];
+        }
+        for (; i &lt; y.size(); i++) {
+            if (t.f) {
+                x.push_back(0);
+                x[i] = x[i] | y[i];
+            }
+            else {
+                x.push_back(1);
+                x[i] = x[i] | y[i];
+            }
+        }
+    }
+    if (ans.f == false) {
+        if (x[0] == 1) {
+            x[0] = 0;
+        }
+        else {
+            x[0] = 1;
+            int i = 1;
+            while (x[i] == 0) {
+                x[i] = 1;
+                i++;
+            }
+            x[i] = 0;
+        }
+        for (int i = 0; i &lt; x.size(); i++) {
+            x[i] = 1 - x[i];
+        }
+    }
+    BigNum tmp = 1;
+    if (ans.f == false) {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans -= tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    else {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans += tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    ans.len = ans.a.size();
+    return ans;
+}
+BigNum BigNum::operator^(const BigNum&amp; T) const //重载位异或运算符，大数与大数进行异或运算
+{
+    BigNum t(*this);
+    vector&lt;int&gt;x;
+    vector&lt;int&gt;y;
+    vector&lt;int&gt;z;
+    BigNum ans = 0;
+    ans.f = !(!(t.f) ^ !(T.f));
+    x = buma(t);
+    y = buma(T);
+    if (x.size() &gt;= y.size()) {
+        int i;
+        for (i = 0; i &lt; y.size(); i++) {
+            x[i] = x[i] ^ y[i];
+        }
+        for (; i &lt; x.size(); i++) {
+            if (T.f) {
+                y.push_back(0);
+                x[i] = x[i] ^ y[i];
+            }
+            else {
+                y.push_back(1);
+                x[i] = x[i] ^ y[i];
+            }
+        }
+    }
+    else {
+        int i;
+        for (i = 0; i &lt; x.size(); i++) {
+            x[i] = x[i] ^ y[i];
+        }
+        for (; i &lt; y.size(); i++) {
+            if (t.f) {
+                x.push_back(0);
+                x[i] = x[i] ^ y[i];
+            }
+            else {
+                x.push_back(1);
+                x[i] = x[i] ^ y[i];
+            }
+        }
+    }
+    if (ans.f == false) {
+        if (x[0] == 1) {
+            x[0] = 0;
+        }
+        else {
+            x[0] = 1;
+            int i = 1;
+            while (x[i] == 0) {
+                x[i] = 1;
+                i++;
+            }
+            x[i] = 0;
+        }
+        for (int i = 0; i &lt; x.size(); i++) {
+            x[i] = 1 - x[i];
+        }
+    }
+    BigNum tmp = 1;
+    if (ans.f == false) {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans -= tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    else {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans += tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    ans.len = ans.a.size();
+    return ans;
+}
+BigNum BigNum::operator~() const //重载取反运算符，大数自身取反运算
+{
+    vector&lt;int&gt; x = buma(*this);
+    BigNum ans=0;
+    ans.f = !f;
+    for (int i = 0; i &lt; x.size();i++) {
+        x[i] = 1 - x[i];
+    }
+    if (ans.f == false) {
+        if (x[0] == 1) {
+            x[0] = 0;
+        }
+        else {
+            x[0] = 1;
+            int i = 1;
+            while (x[i] == 0) {
+                x[i] = 1;
+                i++;
+            }
+            x[i] = 0;
+        }
+        for (int i = 0; i &lt; x.size(); i++) {
+            x[i] = 1 - x[i];
+        }
+    }
+    BigNum tmp = 1;
+    if (ans.f == false) {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans -= tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    else {
+        for (int i = 0; i &lt; x.size(); i++) {
+            ans += tmp * x[i];
+            tmp *= 2;
+        }
+    }
+    ans.len = ans.a.size();
+    return ans;
+}
+bool BigNum::operator&gt;(const BigNum&amp; T)const //大数和另一个大数的大小比较(&gt;)
+{
+    int ln;
+    if (len &gt; T.len)return true;
+    else if (len == T.len)
+    {
+        ln = len - 1;
+        while (ln &gt;= 0 &amp;&amp; a[ln] == T.a[ln])
+            ln--;
+        if (ln &gt;= 0 &amp;&amp; a[ln] &gt; T.a[ln])
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+}
+bool BigNum::operator&gt;(const int&amp; t)const //大数和一个int类型的变量的大小比较
+{
+    BigNum b(t);
+    return *this &gt; b;
+}
+bool BigNum::operator&lt;(const BigNum&amp; T)const //大数和另一个大数的大小比较(&lt;)
+{
+    int ln;
+    if (len &lt; T.len)return true;
+    else if (len == T.len)
+    {
+        ln = len - 1;
+        while (ln &gt;= 0 &amp;&amp; a[ln] == T.a[ln])
+            ln--;
+        if (ln &gt;= 0 &amp;&amp; a[ln] &lt; T.a[ln])
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+}
+bool BigNum::operator&gt;=(const BigNum&amp; T)const //大数和另一个大数的大小比较(&gt;=)
+{
+    return !(*this &lt; T);
+}
+bool BigNum::operator&lt;=(const BigNum&amp; T)const //大数和另一个大数的大小比较(&lt;)
+{
+    return !(*this &gt; T);
+}
+bool BigNum::operator==(const BigNum&amp; T)const //大数和另一个大数的大小比较(==)
+{
+    int ln;
+    if (len != T.len)return false;
+    else if (len == T.len)
+    {
+        ln = len - 1;
+        for (int i = ln; i &gt;= 0; i--) {
+            if (a[i] != T.a[i]) {
+                return false;
+            }
+        }
+    }
+    else
+        return true;
+}
+bool BigNum::operator!=(const BigNum&amp; T)const //大数和另一个大数的大小比较(!=)
+{
+    return !(*this == T);
+}
+BigNum BigNum::operator&lt;&lt;(const int&amp; t)const //重载左移运算符，大数进行算数左移
+{
+    BigNum T(*this);
+    for (int i = t; i &gt; 0; i--) {
+        T *=2;
+    }
+    return T;
+}
+BigNum BigNum::operator&gt;&gt;(const int&amp; t)const //重载右移运算符，大数进行算数右移
+{
+    BigNum T(*this);
+    for (int i = t; i &gt; 0; i--) {
+        T = T / 2;
+    }
+    return T;
+}
+BigNum BigNum::operator+=(const BigNum&amp; T) //重载加法复合赋值运算符，两个大数之间的相加运算
+{
+    return *this = *this + T;
+}
+BigNum BigNum::operator-=(const BigNum&amp; T) //重载减法复合赋值运算符，两个大数之间的相减运算
+{
+    return *this = *this - T;
+}
+BigNum BigNum::operator*=(const BigNum&amp; T) //重载乘法复合赋值运算符，两个大数之间的相乘运算
+{
+    return *this = *this * T;
+}
+BigNum BigNum::operator/=(const int&amp; T) //重载除法复合赋值运算符，大数对一个整数进行相除运算
+{
+    return *this = *this / T;
+}
+BigNum BigNum::operator%=(const int&amp; T) //重载模运算复合赋值运算符，大数对一个整数进行取模运算
+{
+    return *this = *this % T;
+}
+BigNum BigNum::operator&lt;&lt;=(const int&amp; T) //重载左移赋值运算符，大数进行算术左移
+{
+    return *this = *this &lt;&lt; T;
+}
+BigNum BigNum::operator&gt;&gt;=(const int&amp; T) //重载右移赋值运算符，大数进行算术右移
+{
+    return *this = *this &gt;&gt; T;
+}
+BigNum BigNum::operator&amp;=(const BigNum&amp; T) //重载位与运算符，大数与大数进行与运算
+{
+    return *this = *this &amp; T;
+}
+BigNum BigNum::operator|=(const BigNum&amp; T) //重载位或运算符，大数与大数进行或运算
+{
+    return *this = *this | T;
+}
+BigNum BigNum::operator^=(const BigNum&amp; T) //重载位异或运算符，大数与大数进行异或运算
+{
+    return *this = *this ^ T;
+}
+BigNum&amp; BigNum::operator++() //重载前置自增运算符
+{
+    *this += 1;
+    return *this;
+}
+BigNum BigNum::operator++(int) //重载后置自增运算符
+{
+    BigNum ans = *this;
+    ++(*this);
+    return ans;
+}
+BigNum&amp; BigNum::operator--() //重载前置自减运算符
+{
+    *this -=1;
+    return *this;
+}
+BigNum BigNum::operator--(int) //重载后置自减运算符
+{
+    BigNum ans = *this;
+    --(*this);
+    return ans;
+}
+BigNum::operator string() //重载string强制类型转换
+{
+    string s = &quot;&quot;;
+    for (int i = len - 1; i &gt;= 0; i--) {
+        char tmp = (char)a[i]+&#39;0&#39;;
+        s = s + tmp;
+    }
+    return s;
+}
+char ss[500];
+BigNum::operator char*() //重载char数组强制类型转换
+{
+    int k = 0;
+    if (f == false) {
+        ss[k] = &#39;-&#39;;
+        k++;
+    }
+    for (int i = len - 1; i &gt;= 0; i--) {
+        char tmp = (char)a[i] + &#39;0&#39;;
+        ss[k] = { tmp };
+        k++;
+    }
+    return ss;
 }
 
-BigNum MS_15 = 1;    //第十五位梅森素数，2^1279-1
-MS_15 &lt;&lt;= 1279;
-MS_15 -= 1;
-cout &lt;&lt; &quot;第十五个梅森素数（386位）：&quot; &lt;&lt; MS_15 &lt;&lt; endl;
+int main() {
+    BigNum A = 5;
+    int flag = 0;
+    for (int i = 2; A / 2 &gt; i; i++) {
+        if (A % i == 0) {
+            flag = 1;
+            break;
+        }
+    }
+    if (flag) {
+        cout &lt;&lt; A &lt;&lt; &quot;不是素数&quot; &lt;&lt; endl;
+    }
+    else {
+        cout &lt;&lt; A &lt;&lt; &quot;是素数&quot; &lt;&lt; endl;
+    }
 
-return 0;</code></pre><p>}</p>
+    BigNum B = 524287;
+    flag = 0;
+    BigNum k = B / 2;
+    for (long long i = 2; k &gt; i; i++) {
+        if (B % i == 0) {
+            flag = 1;
+            break;
+        }
+    }
+    if (flag) {
+        cout &lt;&lt; B &lt;&lt; &quot;不是素数&quot; &lt;&lt; endl;
+    }
+    else {
+        cout &lt;&lt; B &lt;&lt; &quot;是素数&quot; &lt;&lt; endl;
+    }
+
+    BigNum MS_15 = 1;    //第十五位梅森素数，2^1279-1
+    MS_15 &lt;&lt;= 1279;
+    MS_15 -= 1;
+    cout &lt;&lt; &quot;第十五个梅森素数（386位）：&quot; &lt;&lt; MS_15 &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
 
             </div>
             <hr>

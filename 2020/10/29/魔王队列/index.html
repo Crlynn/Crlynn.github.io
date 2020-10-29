@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    218 字
+                    236 字
                   </span>
                 
 
@@ -169,9 +169,91 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <p>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include “SqStack.h”</p>
-<p>void workA() //特判A<br>{<br>    printf(“sae”);<br>}<br>void workB() //特判B<br>{<br>    printf(“tsaedsae”);<br>}<br>void work_(linkStack* S,LinkQueue* Q) {<br>    char temp;<br>    LinkStack S1;<br>    InitStack(&amp;S1);<br>    while (PoP(S, &amp;temp)) {<br>        if (temp == ‘)’) {<br>            work_(S,Q);<br>        }<br>        else if (temp != ‘(‘) {<br>            //PoP(&amp;S, &amp;temp);<br>            Push(&amp;S1, temp);<br>        }<br>        else {<br>            char head;<br>            if (PoP(&amp;S1, &amp;head)) {<br>                EnQueue(Q, head);<br>                while (PoP(&amp;S1, &amp;temp)) {<br>                    EnQueue(Q, temp);<br>                    EnQueue(Q, head);<br>                }<br>            }<br>            else {<br>                while (DeQueue(Q, &amp;temp)) {<br>                    Push(&amp;S1, temp);<br>                }<br>                PoP(&amp;S1, &amp;head);<br>                EnQueue(Q, head);<br>                while (PoP(&amp;S1, &amp;temp)) {<br>                    EnQueue(Q, temp);<br>                    EnQueue(Q, head);<br>                }<br>            }<br>            break;<br>        }<br>    }<br>}</p>
-<p>int main() {<br>    char tmp;<br>    char str[10000];<br>    int len = 0;<br>    LinkStack S;<br>    InitStack(&amp;S);<br>    LinkStack ans;<br>    InitStack(&amp;ans);<br>    printf(“请输入魔王的语言#结束：”);<br>    while ((tmp = getchar()) != ‘#’) //输入#结束<br>    {<br>        str[len] = tmp;<br>        len++;<br>    }<br>    for (int i = 0; i &lt; len; i++) {<br>        Push(&amp;S, str[i]);<br>    }<br>    while (PoP(&amp;S, &amp;tmp)) {<br>        if (tmp == ‘)’) {<br>            LinkQueue Q;<br>            InitQueue(&amp;Q);<br>            work_(&amp;S,&amp;Q);<br>            while (DeQueue(&amp;Q, &amp;tmp)) {<br>                Push(&amp;ans, tmp);<br>            }<br>        }<br>        else {<br>            Push(&amp;ans, tmp);<br>        }<br>    }<br>    char sb;<br>    while (PoP(&amp;ans, &amp;sb)) {<br>        printf(“%c”, sb);<br>    }<br>    return 0;<br>}</p>
+              <pre><code class="bash">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;SqStack.h&quot;
+
+void workA() //特判A
+{
+    printf(&quot;sae&quot;);
+}
+void workB() //特判B
+{
+    printf(&quot;tsaedsae&quot;);
+}
+void work_(linkStack* S,LinkQueue* Q) {
+    char temp;
+    LinkStack S1;
+    InitStack(&amp;S1);
+    while (PoP(S, &amp;temp)) {
+        if (temp == &#39;)&#39;) {
+            work_(S,Q);
+        }
+        else if (temp != &#39;(&#39;) {
+            //PoP(&amp;S, &amp;temp);
+            Push(&amp;S1, temp);
+        }
+        else {
+            char head;
+            if (PoP(&amp;S1, &amp;head)) {
+                EnQueue(Q, head);
+                while (PoP(&amp;S1, &amp;temp)) {
+                    EnQueue(Q, temp);
+                    EnQueue(Q, head);
+                }
+            }
+            else {
+                while (DeQueue(Q, &amp;temp)) {
+                    Push(&amp;S1, temp);
+                }
+                PoP(&amp;S1, &amp;head);
+                EnQueue(Q, head);
+                while (PoP(&amp;S1, &amp;temp)) {
+                    EnQueue(Q, temp);
+                    EnQueue(Q, head);
+                }
+            }
+            break;
+        }
+    }
+}
+
+int main() {
+    char tmp;
+    char str[10000];
+    int len = 0;
+    LinkStack S;
+    InitStack(&amp;S);
+    LinkStack ans;
+    InitStack(&amp;ans);
+    printf(&quot;请输入魔王的语言#结束：&quot;);
+    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
+    {
+        str[len] = tmp;
+        len++;
+    }
+    for (int i = 0; i &lt; len; i++) {
+        Push(&amp;S, str[i]);
+    }
+    while (PoP(&amp;S, &amp;tmp)) {
+        if (tmp == &#39;)&#39;) {
+            LinkQueue Q;
+            InitQueue(&amp;Q);
+            work_(&amp;S,&amp;Q);
+            while (DeQueue(&amp;Q, &amp;tmp)) {
+                Push(&amp;ans, tmp);
+            }
+        }
+        else {
+            Push(&amp;ans, tmp);
+        }
+    }
+    char sb;
+    while (PoP(&amp;ans, &amp;sb)) {
+        printf(&quot;%c&quot;, sb);
+    }
+    return 0;
+}</code></pre>
 
             </div>
             <hr>
