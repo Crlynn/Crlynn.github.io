@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    4.3k 字
+                    4.7k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      22 分钟
+                      24 分钟
                   </span>
                 
 
@@ -169,7 +169,29 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <pre><code class="bash">#include &lt;iostream&gt;
+              <p>不过是老师的作业罢了quq</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><pre><code class="bash">编写并测试一个无限精度的整数类
+C++内置整形的精度是有限的，例如int类型为32bit，long long类型为64bit。
+现要求你定义一个类，该类能够表示一个绝对值任意大的整数，对整数能够参与的所有运算进行运算符重载。
+要求如下：
+类的实现：
+1、该类能够表示任意绝对值大小的正负整数和无符号整数
+2、重载&lt;,&gt;,&lt;=,&gt;=,==,!=等关系运算符，注意保持逻辑的一致性
+3、重载++,--运算符的前缀和后缀版本
+4、重载与iostream相关的输入&gt;&gt;和输出&lt;&lt;运算符，自己定义输入和输出格式
+5、重载+,-,*,/四则运算和%取模运算，除法/得商，取模%得余数
+6、重载位运算符&amp;,|,^,~
+7、重载左移&lt;&lt;和右移&gt;&gt;运算符，无符号数实现为逻辑左右移，有符号数为算数左右移
+8、定义重载的构造函数，能够以各类整形、各类字符串类型、数组或vector初始化对象。
+9、重载强制类型转换操作符，能够将大整数对象转换为字符串或数组等
+10、重载赋值运算=和各种复合赋值运算
+11、重载下标运算符，返回大整数的对应位置的字节，比如a为0xBEEF，则a[0]为0xEF
+类的测试：
+依次从大到小输出3个精度为1024bit的素数
+
+注意：每一点都有分数，总分100分，允许部分完成。</code></pre>
+<p>一开始是百度的int数组，删删改改还是有限精度，于是又找了一份string的，但缺的算法太多也就懒得改了。<br>最后还是下定决心用vector重做一遍。<br>本来觉着挺难的题目，做了三遍之后：啊，也不过如此嘛 ~</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="bash">#include &lt;iostream&gt;
 #include &lt;stdio.h&gt;
 #include &lt;algorithm&gt;
 #include &lt;string.h&gt;
@@ -1057,6 +1079,13 @@ int main() {
             <div>
               <p>
                 
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </span>
                 
               </p>
               

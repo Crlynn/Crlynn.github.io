@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    570 字
+                    951 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      3 分钟
+                      5 分钟
                   </span>
                 
 
@@ -354,12 +354,121 @@ int main() {
     }
     return 0;
 }</code></pre>
+<h3 id="第四版"><a href="#第四版" class="headerlink" title="第四版"></a>第四版</h3><p>再去给老师看的时候，(((abc)))，猛陈落泪，输出还挺离谱的。<br>不过一番排查之后发现，其实是括号内输出的时候已经是倒着的序列，我在25行把它正过来了，但实际上我work_()函数内读取的原字符串就是倒着的，因此删除那正过来的一小部分代码就可以了。</p>
+<pre><code class="bash">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;SqStack.h&quot;
+
+//void workA() //特判A
+//{
+//    printf(&quot;sae&quot;);
+//}
+//void workB() //特判B
+//{
+//    printf(&quot;tsaedsae&quot;);
+//}
+void work_(linkStack* S,LinkQueue* Q) {
+    char temp;
+    LinkStack S1;
+    InitStack(&amp;S1);
+    while (PoP(S, &amp;temp)) {
+        if (temp == &#39;)&#39;) {
+            LinkQueue Qtemp;
+            InitQueue(&amp;Qtemp);
+            work_(S,&amp;Qtemp);
+            char temp_;
+            LinkStack Stemp;
+            InitStack(&amp;Stemp);
+            /*while (DeQueue(&amp;Qtemp, &amp;temp_)) {
+                Push(&amp;Stemp, temp_);
+            }
+            while (PoP(&amp;Stemp, &amp;temp_)) {
+                EnQueue(Q, temp_);
+            }*/
+            while (DeQueue(&amp;Qtemp, &amp;temp_)) {
+                EnQueue(Q, temp_);
+            }
+        }
+        else if (temp != &#39;(&#39;) {
+            //PoP(&amp;S, &amp;temp);
+            //Push(&amp;S1, temp);
+            EnQueue(Q,temp);
+        }
+        else {
+            char head;
+
+                while (DeQueue(Q, &amp;temp)) {
+                    Push(&amp;S1, temp);
+                }
+                PoP(&amp;S1, &amp;head);
+                EnQueue(Q, head);
+                while (PoP(&amp;S1, &amp;temp)) {
+                    EnQueue(Q, temp);
+                    EnQueue(Q, head);
+                }
+
+            break;
+        }
+    }
+}
+
+int main() {
+    char tmp;
+    char str[10000];
+    int len = 0;
+    LinkStack S;
+    InitStack(&amp;S);
+    LinkStack ans;
+    InitStack(&amp;ans);
+    printf(&quot;请输入魔王的语言，#结束：&quot;);
+    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
+    {
+        str[len] = tmp;
+        len++;
+    }
+    for (int i = 0; i &lt; len; i++) {
+        Push(&amp;S, str[i]);
+    }
+    while (PoP(&amp;S, &amp;tmp)) {
+        if (tmp == &#39;)&#39;) {
+            LinkQueue Q;
+            InitQueue(&amp;Q);
+            work_(&amp;S,&amp;Q);
+            while (DeQueue(&amp;Q, &amp;tmp)) {
+                Push(&amp;ans, tmp);
+            }
+        }
+        else {
+            Push(&amp;ans, tmp);
+        }
+    }
+    char sb;
+    while (PoP(&amp;ans, &amp;tmp)) {
+        if (tmp == &#39;A&#39;) {
+            printf(&quot;sae&quot;);
+        }
+        else if (tmp == &#39;B&#39;) {
+            printf(&quot;tsaedsae&quot;);
+        }
+        else {
+            printf(&quot;%c&quot;, tmp);
+        }
+    }
+    return 0;
+}</code></pre>
 
             </div>
             <hr>
             <div>
               <p>
                 
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                  </span>
                 
               </p>
               
