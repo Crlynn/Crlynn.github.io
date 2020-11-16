@@ -169,7 +169,7 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h3 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h3><p>第一版完全没考虑嵌套括号的情况QAQ，老师一写出((ab)(cd))我就知道我败了😭</p>
+              <h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><p>第一版完全没考虑嵌套括号的情况QAQ，老师一写出((ab)(cd))我就知道我败了😭</p>
 <pre><code class="bash">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &quot;SqStack.h&quot;
@@ -255,7 +255,7 @@ int main() {
     }
     return 0;
 }</code></pre>
-<h3 id="第三版"><a href="#第三版" class="headerlink" title="第三版"></a>第三版</h3><p>由于发现第二版不能正确输出(a(ab))，于是我捋了捋题目改了一下顺序。</p>
+<h2 id="第三版"><a href="#第三版" class="headerlink" title="第三版"></a>第三版</h2><p>由于发现第二版不能正确输出(a(ab))，于是我捋了捋题目改了一下顺序。</p>
 <pre><code class="bash">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &quot;SqStack.h&quot;
@@ -354,7 +354,7 @@ int main() {
     }
     return 0;
 }</code></pre>
-<h3 id="第四版"><a href="#第四版" class="headerlink" title="第四版"></a>第四版</h3><p>再去给老师看的时候，(((abc)))，猛陈落泪，输出还挺离谱的。<br>不过一番排查之后发现，其实是括号内输出的时候已经是倒着的序列，我在25行把它正过来了，但实际上我work_()函数内读取的原字符串就是倒着的，因此删除那正过来的一小部分代码就可以了。</p>
+<h2 id="第四版"><a href="#第四版" class="headerlink" title="第四版"></a>第四版</h2><p>再去给老师看的时候，(((abc)))，猛陈落泪，输出还挺离谱的。<br>不过一番排查之后发现，其实是括号内输出的时候已经是倒着的序列，我在25行把它正过来了，但实际上我work_()函数内读取的原字符串就是倒着的，因此删除那正过来的一小部分代码就可以了。</p>
 <pre><code class="bash">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &quot;SqStack.h&quot;
@@ -462,13 +462,6 @@ int main() {
             <div>
               <p>
                 
-                
-                  <span>
-                <i class="iconfont icon-tag"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-                    
-                  </span>
                 
               </p>
               
