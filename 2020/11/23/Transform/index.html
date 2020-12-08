@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Crlynn">
   <meta name="keywords" content="">
-  <title>魔王队列 - 你来啦~</title>
+  <title>Transform - 你来啦~</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 十月 29日 2020, 11:04 晚上
+                  星期一, 十一月 23日 2020, 6:59 晚上
                 </p>
               
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    950 字
+                    1.2k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      5 分钟
+                      7 分钟
                   </span>
                 
 
@@ -169,293 +169,258 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><p>第一版完全没考虑嵌套括号的情况QAQ，老师一写出((ab)(cd))我就知道我败了😭</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
+              <pre><code class="bash">#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;OpenMesh/Core/IO/MeshIO.hh&gt;
+#include &lt;OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh&gt;
+#include &lt;Eigen/Sparse&gt;
+#include &lt;Eigen/Dense&gt;
+#include &lt;fstream&gt;
 
-void workA() //特判A
+using namespace std;
+using namespace OpenMesh;
+using namespace Eigen;
+
+typedef TriMesh_ArrayKernelT&lt;&gt; MyMesh;
+typedef Eigen::SparseMatrix&lt;float,RowMajor&gt; SparseMatrixType;
+
+void ReadData(std::istream &amp;fin, Eigen::MatrixXf &amp;m_matrix);
+
+int main()
 {
-    printf(&quot;sae&quot;);
-}
-void workB() //特判B
-{
-    printf(&quot;tsaedsae&quot;);
-}
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            work_(S,Q);
-        }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            Push(&amp;S1, temp);
-        }
-        else {
-            char head;
-            if (PoP(&amp;S1, &amp;head)) {
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
-            }
-            else {
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
-            }
-            break;
-        }
+    MyMesh mesh;
+    /************/
+    /**** s1 ****/
+    /************/
+    //读取 s1.obj
+    if (!IO::read_mesh(mesh,&quot;../small/s1.obj&quot;)) {
+        cout &lt;&lt; &quot;reading s1.obj Error&quot; &lt;&lt; endl;
+        exit(0);
     }
-}
 
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
+    const int m = mesh.n_faces(),n = mesh.n_vertices();
+
+    //读取s1.obj文件中的点
+
+    MatrixXf N_s1(n + m, 3);
+    N_s1.setZero();
+
+    int Id_row=0;
+    for(MyMesh::VertexIter v_it = mesh.vertices_begin();v_it != mesh.vertices_end();++v_it){
+        for(int i=0;i&lt;3;i++)
+            N_s1(Id_row, i) = mesh.point(*v_it).data()[i];
+        Id_row++;
+    }
+    Id_row=0;
+
+    //读取s1.obj文件中的面，同时构造ID矩阵
+
+    Matrix3f temp(3,3);
+    temp.setZero();
+    RowVector3f v4(1,3);
+    SparseMatrixType ID(4 * m, m + n);
+    ID.reserve(RowVectorXf::Constant(4*m,1));
+
+    int _m = 0,_v = 0,_p = 0;
+
+    for(MyMesh::FaceIter f_it = mesh.faces_begin();f_it != mesh.faces_end(); ++f_it){
+        _v = 0;
+        //遍历v1、v2、v3
+        for(MyMesh::FaceVertexIter fv_it = mesh.fv_begin(*f_it);fv_it != mesh.fv_end(*f_it);++fv_it){
+            for(_p=0; _p &lt; 3; _p++)
+                temp(_v, _p) = mesh.point(*fv_it).data()[_p];
+            ID.coeffRef(_m*4+_v,fv_it-&gt;idx()) += 1;
+            _v++;
+        }
+
+        //计算每个面的v4
+        v4 = temp.row(0) + ((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)) /
+                            sqrt((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)).norm()));
+        ID.coeffRef(_m*4+3,n+_m) += 1;
+        N_s1.row(_m+n) = v4;
+        _m++;
+    }
+
+    //过程变量归零，用来后续使用
+    _m = 0,_v = 0,_p = 0;
+    //压缩剩余的空间
+    ID.makeCompressed();
+
+    //构造kk矩阵
+    SparseMatrixType kk(3 * m, 4 * m);
+    kk.reserve(RowVectorXf::Constant(3*m,2));
+
+    for(int i=0; i &lt; m; i++){
+        kk.coeffRef(i*3,i*4) += -1;
+        kk.coeffRef(i*3+1,i*4) += -1;
+        kk.coeffRef(i*3+2,i*4) += -1;
+        kk.coeffRef(i*3,i*4+1) += 1;
+        kk.coeffRef(i*3+1,i*4+2) += 1;
+        kk.coeffRef(i*3+2,i*4+3) += 1;
+        /* k= -1 1 0 0
+         *    -1 0 1 0
+         *    -1 0 0 1 */
+    }
+//    for(int i = 0;i&lt;200;i++)
+//        for(int j = 0;j&lt;m+n;j++){
+//            if(ID.coeffRef(i,j) != 0 )
+//                cout &lt;&lt; i &lt;&lt; &quot; &quot; &lt;&lt; j &lt;&lt; endl;
+//        }
+    kk.makeCompressed();
+
+    /************/
+    /**** s0 ****/
+    /************/
+    //读取 s0.obj
+    if (!IO::read_mesh(mesh,&quot;../small/s0.obj&quot;)) {
+        cout &lt;&lt; &quot;reading s0.obj Error&quot; &lt;&lt; endl;
+        exit(0);
+    }
+
+    //由于所给obj文件面数相同，不需要重复读取
+
+    //读取s0.obj文件中的点
+    MatrixXf N_s0( m+n, 3);
+    N_s0.setZero();
+
+    for(MyMesh::VertexIter v_it = mesh.vertices_begin();v_it != mesh.vertices_end();++v_it) {
+        for (int i = 0; i &lt; 3; i++)
+            N_s0(Id_row, i) = mesh.point(*v_it).data()[i];
+        Id_row++;
+    }
+
+    for(MyMesh::FaceIter f_it = mesh.faces_begin();f_it != mesh.faces_end();++f_it){
+        _v = 0;
+        //遍历v1、v2、v3
+        for(MyMesh::FaceVertexIter fv_it = mesh.fv_begin(*f_it);fv_it != mesh.fv_end(*f_it);++fv_it){
+            for(_p=0; _p &lt; 3; _p++)
+                temp(_v, _p) = mesh.point(*fv_it).data()[_p];
+            _v++;
+        }
+
+        //计算每个面的v4
+        v4 = temp.row(0) + ((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)) /
+                            sqrt((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)).norm()));
+        N_s0.row(_m+n) = v4;
+        _m++;
+    }
+
+    MatrixXf V_s0 = kk*ID*N_s0;
+    MatrixXf V_s0_inv(3*m,3*m);
+    V_s0_inv.setZero();
+    for(int i=0;i&lt;m;i++){
+        V_s0_inv.block(i*3,i*3,3,3) = V_s0.block(i*3,0,3,3).inverse();
+
+    }
+
+    Id_row=0;
+    //过程变量归零，用来后续使用
+    _m = 0,_v = 0,_p = 0;
+
+    //读取 t0.obj
+    if (!IO::read_mesh(mesh,&quot;../small/t0.obj&quot;)) {
+        cout &lt;&lt; &quot;reading s0.obj Error&quot; &lt;&lt; endl;
+        exit(0);
+    }
+
+    //由于所给obj文件面数相同，不需要重复读取
+
+    //读取t0.obj文件中的点
+
+    MatrixXf N_t0( m+n, 3);
+    N_t0.setZero();
+
+    for(MyMesh::VertexIter v_it = mesh.vertices_begin();v_it != mesh.vertices_end();++v_it){
+        for(int i=0;i&lt;3;i++)
+            N_t0(Id_row, i) = mesh.point(*v_it).data()[i];
+        Id_row++;
+    }
+
+    for(MyMesh::FaceIter f_it = mesh.faces_begin();f_it != mesh.faces_end();++f_it){
+        _v = 0;
+        //遍历v1、v2、v3
+        for(MyMesh::FaceVertexIter fv_it = mesh.fv_begin(*f_it);fv_it != mesh.fv_end(*f_it);++fv_it){
+            for(_p=0; _p &lt; 3; _p++)
+                temp(_v, _p) = mesh.point(*fv_it).data()[_p];
+            _v++;
+        }
+
+        //计算每个面的v4
+        v4 = temp.row(0) + ((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)) /
+                            sqrt((temp.row(1) - temp.row(0)).cross(temp.row(2) - temp.row(0)).norm()));
+        N_t0.row(_m+n) = v4;
+        _m++;
+    }
+
+    MatrixXf V_t0 = kk*ID*N_t0;
+    MatrixXf V_t0_inv(3*m,3*m);
+    V_t0_inv.setZero();
+    for(int i=0;i&lt;m;i++){
+        V_t0_inv.block(i*3,i*3,3,3) = V_t0.block(i*3,0,3,3).inverse();
+    }
+
+    //过程变量归零，用来后续使用
+    Id_row=0;
+    _m = 0,_v = 0,_p = 0;
+
+    MatrixXf N_t1(m+n,3);
+    //svd求广义逆矩阵
+    /*JacobiSVD&lt;Eigen::MatrixXf&gt; svd(N_t0, ComputeThinU | ComputeThinV );
+    MatrixXf V = svd.matrixV(), U = svd.matrixU();
+    MatrixXf S_s0 = U.inverse() * N_t0 * V.transpose().inverse();*/
+
+//    ofstream fout(&quot;../small/a.txt&quot;);
+//    fout &lt;&lt; V_t0_inv * kk * ID &lt;&lt; std::endl;
+//    fout.close();
+//    ofstream fout1(&quot;../small/b.txt&quot;);
+//    fout1 &lt;&lt; V_s0_inv * kk * ID * N_s1 &lt;&lt; std::endl;
+//    fout1.close();
+//    ofstream fout2(&quot;../small/t0.txt&quot;);
+//    fout2 &lt;&lt; N_t0 &lt;&lt; std::endl;
+//    fout2.close();
+//    ofstream fout3(&quot;../small/inv.txt&quot;);
+//    fout3 &lt;&lt; kk*ID*N_s0 &lt;&lt; std::endl;
+//    fout3.close();
+//    ofstream fout4(&quot;../small/sol.txt&quot;);
+//    //fout4 &lt;&lt; N_s0_solve &lt;&lt; std::endl;
+//    fout4.close();
+
+    SparseMatrixType A = (V_t0_inv * kk * ID).sparseView();
+    SparseMatrixType B = (V_s0_inv * kk * ID * N_s1).sparseView();
+    cout &lt;&lt; A.rows() &lt;&lt; &quot; &quot; &lt;&lt; A.cols() &lt;&lt; endl;
+
+    clock_t time_stt = clock();
+    /*std::ifstream fin1(&quot;../small/t1.txt&quot;);
+    if (!fin1)
     {
-        str[len] = tmp;
-        len++;
+        return 1;
     }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
+    ReadData(fin1, N_t1);*/
+    SparseLU&lt;SparseMatrix&lt;float&gt;,AMDOrdering&lt;int&gt;&gt; solver_qr;
+    solver_qr.compute(A.transpose()*A);
+    N_t1 = solver_qr.solve(A.transpose()*B);
+
+    ofstream fout5(&quot;../small/N_t1.txt&quot;);
+    fout5 &lt;&lt; N_t1 &lt;&lt; std::endl;
+    fout5.close();
+
+    cout &lt;&lt; &quot;time is :&quot; &lt;&lt; 1000 * (clock() - time_stt)/(double)CLOCKS_PER_SEC &lt;&lt; &quot;ms&quot; &lt;&lt; endl;
+
+
+    for(MyMesh::VertexIter v_it = mesh.vertices_begin();v_it != mesh.vertices_end();++v_it){
+        for(int i=0;i&lt;3;i++)
+            mesh.point(*v_it).data()[i] = N_t1(Id_row,i);
+        Id_row++;
     }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
+
+    if (!IO::write_mesh(mesh,&quot;../small/t1.obj&quot;)) {
+        cout &lt;&lt; &quot;writing t1.obj Error&quot; &lt;&lt; endl;
+        exit(1);
     }
-    char sb;
-    while (PoP(&amp;ans, &amp;sb)) {
-        printf(&quot;%c&quot;, sb);
-    }
+
     return 0;
-}</code></pre>
-<h2 id="第三版"><a href="#第三版" class="headerlink" title="第三版"></a>第三版</h2><p>由于发现第二版不能正确输出(a(ab))，于是我捋了捋题目改了一下顺序。</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
-
-void workA() //特判A
-{
-    printf(&quot;sae&quot;);
 }
-void workB() //特判B
-{
-    printf(&quot;tsaedsae&quot;);
-}
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            LinkQueue Qtemp;
-            InitQueue(&amp;Qtemp);
-            work_(S,&amp;Qtemp);
-            char temp_;
-            LinkStack Stemp;
-            InitStack(&amp;Stemp);
-            while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                Push(&amp;Stemp, temp_);
-            }
-            while (PoP(&amp;Stemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }
-        }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            //Push(&amp;S1, temp);
-            EnQueue(Q,temp);
-        }
-        else {
-            char head;
-
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
-
-            break;
-        }
-    }
-}
-
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
-    {
-        str[len] = tmp;
-        len++;
-    }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
-    }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
-    }
-    char sb;
-    while (PoP(&amp;ans, &amp;tmp)) {
-        if (tmp == &#39;A&#39;) {
-            printf(&quot;sae&quot;);
-        }
-        else if (tmp == &#39;B&#39;) {
-            printf(&quot;tsaedsae&quot;);
-        }
-        else {
-            printf(&quot;%c&quot;, tmp);
-        }
-    }
-    return 0;
-}</code></pre>
-<h2 id="第四版"><a href="#第四版" class="headerlink" title="第四版"></a>第四版</h2><p>再去给老师看的时候，(((abc)))，猛陈落泪，输出还挺离谱的。<br>不过一番排查之后发现，其实是括号内输出的时候已经是倒着的序列，我在25行把它正过来了，但实际上work_()函数内读取的原字符串就是倒着的，因此删除那正过来的一小部分代码就可以了。</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
-
-//void workA() //特判A
-//{
-//    printf(&quot;sae&quot;);
-//}
-//void workB() //特判B
-//{
-//    printf(&quot;tsaedsae&quot;);
-//}
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            LinkQueue Qtemp;
-            InitQueue(&amp;Qtemp);
-            work_(S,&amp;Qtemp);
-            char temp_;
-            LinkStack Stemp;
-            InitStack(&amp;Stemp);
-            /*while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                Push(&amp;Stemp, temp_);
-            }
-            while (PoP(&amp;Stemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }*/
-            while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }
-        }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            //Push(&amp;S1, temp);
-            EnQueue(Q,temp);
-        }
-        else {
-            char head;
-
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
-
-            break;
-        }
-    }
-}
-
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言，#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
-    {
-        str[len] = tmp;
-        len++;
-    }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
-    }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
-    }
-    char sb;
-    while (PoP(&amp;ans, &amp;tmp)) {
-        if (tmp == &#39;A&#39;) {
-            printf(&quot;sae&quot;);
-        }
-        else if (tmp == &#39;B&#39;) {
-            printf(&quot;tsaedsae&quot;);
-        }
-        else {
-            printf(&quot;%c&quot;, tmp);
-        }
-    }
-    return 0;
-}</code></pre>
+</code></pre>
 
             </div>
             <hr>
@@ -466,7 +431,7 @@ int main() {
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                      <a class="hover-with-bg" href="/tags/SLAM/">SLAM</a>
                     
                   </span>
                 
@@ -476,16 +441,16 @@ int main() {
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
                     
-                      <a href="/2020/11/23/Transform/">
+                      <a href="/2020/12/08/ChildSibilingTree/">
                         <i class="fa fa-chevron-left"></i>
-                        <span>Transform</span>
+                        <span>ChildSibilingTree</span>
                       </a>
                     
                   </div>
                   <div class="post-next col-12 col-md-6">
                     
-                      <a href="/2020/10/29/%E5%A4%A7%E6%95%B0%E7%B1%BB%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
-                        <span>大数类运算符重载</span>
+                      <a href="/2020/10/29/%E9%AD%94%E7%8E%8B%E9%98%9F%E5%88%97/">
+                        <span>魔王队列</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
                     
@@ -660,7 +625,7 @@ int main() {
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "魔王队列&nbsp;",
+        "Transform&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

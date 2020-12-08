@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Crlynn">
   <meta name="keywords" content="">
-  <title>魔王队列 - 你来啦~</title>
+  <title>ChildSibilingTree - 你来啦~</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 十月 29日 2020, 11:04 晚上
+                  星期二, 十二月 8日 2020, 8:38 早上
                 </p>
               
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    950 字
+                    1.9k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      5 分钟
+                      9 分钟
                   </span>
                 
 
@@ -169,290 +169,461 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><p>第一版完全没考虑嵌套括号的情况QAQ，老师一写出((ab)(cd))我就知道我败了😭</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
+              <pre><code class="bash">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
+#include &lt;iostream&gt;
+#include &lt;stack&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+typedef char ElemType;
+typedef int status;
+typedef struct CSNode {
+    ElemType data=&#39;#&#39;;
+    struct CSNode* firstchild, * nextsibling;
+}CSNode,* CSTree;
 
-void workA() //特判A
-{
-    printf(&quot;sae&quot;);
+/************/
+/***查找类***/
+/************/
+
+//如果树T存在，返回树的根
+ElemType Root(const CSTree&amp; T){
+    if (T)
+        return T-&gt;data;
+    return &#39;#&#39;;
 }
-void workB() //特判B
-{
-    printf(&quot;tsaedsae&quot;);
-}
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            work_(S,Q);
+
+//求当前节点的双亲结点
+CSNode* Parent(CSTree T, ElemType cur_e){
+    //先将首孩子入队，之后各兄弟依次入队，进行遍历
+    queue&lt;CSNode*&gt;Q;
+    if (T){
+        if (T-&gt;data == cur_e)
+            return NULL;//根结点无双亲,结束，返回NULL
+        Q.push(T);//根结点入队
+        while (!Q.empty()){
+            CSNode* e=Q.front();
+            Q.pop();
+            CSNode* temp = e;//当前双亲节点
+            if (e-&gt;firstchild){
+                if (e-&gt;firstchild-&gt;data == cur_e){
+                    return temp;
+                }
+                Q.push(e-&gt;firstchild);
+                CSNode* sibling = e-&gt;firstchild-&gt;nextsibling;//指向孩子的兄弟结点
+                while (sibling) //一直搜索同一层的兄弟
+                {
+                    if (sibling-&gt;data == cur_e)//兄弟是所求的结点，则返回双亲
+                    {
+                        return temp;
+                    }
+                    Q.push(sibling);//兄弟入队
+                    sibling = sibling-&gt;nextsibling;//再搜索下一个兄弟
+                }
+            }
         }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            Push(&amp;S1, temp);
+    }
+    return NULL;
+}
+
+//求当前结点的最左孩子
+ElemType LeftChild(CSTree&amp; T, ElemType cur_e)
+{
+    //非递归前序遍历
+    stack&lt;CSNode*&gt;a;
+    CSNode* p;
+    a.push(T);
+    while (!a.empty()) {
+        p = a.top();
+        a.pop();
+        while (p) {
+            if (p-&gt;data == cur_e) {
+                if (p-&gt;firstchild) {
+                    return p-&gt;firstchild-&gt;data; //返回结点的值
+                }
+                else {
+                    return &#39;#&#39;;
+                }
+            }
+            if (p-&gt;nextsibling) {
+                a.push(p-&gt;nextsibling);
+            }
+            p = p-&gt;firstchild;
+        }
+    }
+    return NULL;
+}
+
+//求当前结点的右兄弟
+ElemType RightSibling(CSTree&amp; T, ElemType cur_e) {
+    //非递归前序遍历
+    stack&lt;CSNode*&gt;a;
+    CSNode* p;
+    a.push(T);
+    while (!a.empty()) {
+        p = a.top();
+        a.pop();
+        while (p) {
+            if (p-&gt;data == cur_e) {
+                if (p-&gt;nextsibling) {
+                    return p-&gt;nextsibling-&gt;data; //返回结点的值
+                }
+                else {
+                    return &#39;#&#39;;
+                }
+            }
+            if (p-&gt;nextsibling) {
+                a.push(p-&gt;nextsibling);
+            }
+            p = p-&gt;firstchild;
+        }
+    }
+    return NULL;
+}
+
+//判定树是否为空树
+bool TreeEmpty(CSTree&amp; T) {
+    if(T)
+        return false;    
+    else
+        return true;   //空树
+}
+
+//树的深度
+int TreeDepth(CSTree T) {
+    CSNode* p;
+    if (!T) return 0;
+    if ((*T).firstchild == NULL) return 1;
+    int dep, max = 0;
+    p = (*T).firstchild;
+    for (; p != NULL; p = p-&gt;nextsibling)
+    {
+        dep = TreeDepth(p);
+        if (dep &gt; max)
+        {
+            max = dep;
+        }
+    }
+    return max + 1;
+}
+
+//打印节点
+void displayElem(CSTree T) {
+    printf(&quot;%c &quot;, T-&gt;data);
+}
+
+//递归先序遍历
+void RePreOrderTraverse(CSTree T) {
+    if (T) {
+        displayElem(T);//输出节点
+        RePreOrderTraverse(T-&gt;firstchild);//访问该结点的左孩子
+        RePreOrderTraverse(T-&gt;nextsibling);//访问该结点的右孩子
+    }
+
+    return;
+}
+
+//非递归先序遍历
+void PreOrderTraverse(CSTree T) {
+    stack&lt;CSNode*&gt;a;
+    CSNode* p;
+    a.push(T);
+    while (!a.empty()) {
+        p = a.top();
+        a.pop();
+        while (p) {
+            displayElem(p);
+            //如果该结点有右孩子，右孩子进栈
+            if (p-&gt;nextsibling) {
+                a.push(p-&gt;nextsibling);
+            }
+            p = p-&gt;firstchild;//一直指向根结点最后一个左孩子
+        }
+    }
+}
+
+//递归后序遍历
+void RePostOrderTraverse(CSTree T) {
+    if (T) {
+        RePostOrderTraverse(T-&gt;firstchild);//遍历左孩子
+        RePostOrderTraverse(T-&gt;nextsibling);//遍历右孩子
+        displayElem(T);
+    }
+    return;
+}
+
+//非递归后序遍历
+void PostOrderTraverse(CSTree T) {
+    if (T == NULL) {
+        return;
+    }
+    stack&lt;CSNode*&gt; a;
+    CSNode* current_pointer;
+    CSNode* last_pointer = NULL; //记录前一次循环的指针  
+
+    a.push(T);
+
+    while (!a.empty()) {
+        current_pointer = a.top();
+
+        if ((current_pointer-&gt;firstchild == NULL &amp;&amp; current_pointer-&gt;nextsibling == NULL)
+            || (last_pointer != NULL &amp;&amp; (last_pointer == current_pointer-&gt;firstchild
+                || last_pointer == current_pointer-&gt;nextsibling))) {
+
+            cout &lt;&lt; current_pointer-&gt;data &lt;&lt; &#39; &#39;;
+            a.pop();
+            last_pointer = current_pointer;
         }
         else {
-            char head;
-            if (PoP(&amp;S1, &amp;head)) {
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
+            if (current_pointer-&gt;nextsibling != NULL) {
+                a.push(current_pointer-&gt;nextsibling);
+            }
+            if (current_pointer-&gt;firstchild != NULL) {
+                a.push(current_pointer-&gt;firstchild);
+            }
+        }
+    }
+}
+
+/************/
+/***插入类***/
+/************/
+
+//初始化置空树
+void InitTree(CSTree* T)
+{
+    *T = NULL;
+}
+
+//按定义构建孩子兄弟树
+void CreatTree(CSTree* T) {
+    char ch;
+    cin &gt;&gt; ch;
+    if (ch == &#39;#&#39;) {
+        *T = NULL;
+        return;
+    }
+    else {
+        (*T) = (CSNode*)malloc(sizeof(CSNode));
+        (*T)-&gt;data = ch;
+        printf(&quot;输入%c的长子:&quot;, ch);
+        CreatTree((&amp;(*T)-&gt;firstchild));
+        printf(&quot;输入%c的兄弟:&quot;, ch);
+        CreatTree(&amp;(*T)-&gt;nextsibling);
+    }
+    return;
+}
+
+//将一新树插入为结点t的第i棵子树
+status InsertChild(CSTree&amp; T, ElemType&amp; t, int i) {
+    //节点t的第i棵子树==t的长子 || t的长子的第i-1个兄弟
+    CSTree C;
+    printf(&quot;输入该子树的根节点：&quot;); //根节点没有右兄弟
+    InitTree(&amp;C);
+    CreatTree(&amp;C);
+
+    stack&lt;CSNode*&gt;a; //先序遍历找到t
+    CSNode* p;
+    a.push(T);
+    while (!a.empty()) {
+        p = a.top();
+        a.pop();
+        while (p) {
+            if (p-&gt;data == t) {
+                a = stack&lt;CSNode*&gt;();   //清空a跳出最外层循环
+                break;
+            }
+            if (p-&gt;nextsibling) {
+                a.push(p-&gt;nextsibling);
+            }
+            p = p-&gt;firstchild;//一直指向根结点最后一个左孩子
+        }
+    }
+    //需要验证i的合法性
+    if (i &lt;= 0) return 0;
+    if (i == 1) {
+        C-&gt;nextsibling = p-&gt;firstchild;
+        p-&gt;firstchild = C;
+    }
+    else {
+        p = p-&gt;firstchild;
+        i--;
+        while (--i) {
+            if (p) {
+                p = p-&gt;nextsibling;
             }
             else {
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
+                return 0;
             }
-            break;
         }
+        C-&gt;nextsibling = p-&gt;nextsibling;
+        p-&gt;nextsibling = C;
     }
+    return 1;
 }
 
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
-    {
-        str[len] = tmp;
-        len++;
-    }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
-    }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
-    }
-    char sb;
-    while (PoP(&amp;ans, &amp;sb)) {
-        printf(&quot;%c&quot;, sb);
-    }
-    return 0;
-}</code></pre>
-<h2 id="第三版"><a href="#第三版" class="headerlink" title="第三版"></a>第三版</h2><p>由于发现第二版不能正确输出(a(ab))，于是我捋了捋题目改了一下顺序。</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
+/************/
+/***删除类***/
+/************/
 
-void workA() //特判A
+//销毁树
+void DestroyTree(CSTree&amp; T)
 {
-    printf(&quot;sae&quot;);
+    if (T)
+    {
+        if (T-&gt;firstchild)    //左子树存在，即销毁以左孩子为结点的子树
+            DestroyTree(T-&gt;firstchild);
+        if (T-&gt;nextsibling)    //右子树存在，即销毁以兄弟为结点的子树
+            DestroyTree(T-&gt;nextsibling);
+        free(T);
+        T = NULL;
+    }
 }
-void workB() //特判B
+
+//清空树
+void CleanTree(CSTree&amp; T)
 {
-    printf(&quot;tsaedsae&quot;);
+    DestroyTree(T);
 }
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            LinkQueue Qtemp;
-            InitQueue(&amp;Qtemp);
-            work_(S,&amp;Qtemp);
-            char temp_;
-            LinkStack Stemp;
-            InitStack(&amp;Stemp);
-            while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                Push(&amp;Stemp, temp_);
-            }
-            while (PoP(&amp;Stemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }
-        }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            //Push(&amp;S1, temp);
-            EnQueue(Q,temp);
-        }
-        else {
-            char head;
 
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
+// 删除结点t的第i棵子树
+status DeleteChild(CSTree&amp; T, ElemType&amp; t, int i) {
+    //节点t的第i棵子树==t的长子 || t的长子的第i-1个兄弟
 
-            break;
+    stack&lt;CSNode*&gt;a; //先序遍历找到t
+    CSNode* p;
+    a.push(T);
+    while (!a.empty()) {
+        p = a.top();
+        a.pop();
+        while (p) {
+            if (p-&gt;data == t) {
+                a = stack&lt;CSNode*&gt;();   //清空a跳出最外层循环
+                break;
+            }
+            if (p-&gt;nextsibling) {
+                a.push(p-&gt;nextsibling);
+            }
+            p = p-&gt;firstchild;//一直指向根结点最后一个左孩子
         }
     }
+    if (i &lt;= 0) return 0;
+    if (i == 1) {
+        p-&gt;firstchild = p-&gt;firstchild-&gt;nextsibling;
+
+    }
+    else {
+        p = p-&gt;firstchild;
+        i--;
+        while (--i) {
+            if (p) {
+                p = p-&gt;nextsibling;
+            }
+            else {
+                return 0;
+            }
+        }
+        p-&gt;nextsibling = p-&gt;nextsibling-&gt;nextsibling;
+    }
+    return 1;
 }
 
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
+int main()
+{
+    CSTree T;
+    printf(&quot;输入根节点,空则输入#：&quot;);
+    InitTree(&amp;T);
+    CreatTree(&amp;T);
+
+    printf(&quot;递归先序遍历：\n&quot;);
+    RePreOrderTraverse(T);
+    printf(&quot;\n&quot;);
+    printf(&quot;非递归先序遍历：\n&quot;);
+    PreOrderTraverse(T);
+    printf(&quot;\n&quot;);
+    printf(&quot;递归后序遍历：\n&quot;);
+    RePostOrderTraverse(T);
+    printf(&quot;\n&quot;);
+    printf(&quot;非递归后序遍历：\n&quot;);
+    PostOrderTraverse(T);
+    printf(&quot;\n&quot;);
+
+    CSNode* P;
+    char p;
+    cout &lt;&lt; &quot;请输入要查询双亲的节点:&quot;;
+    cin &gt;&gt; p;
+    P = Parent(T, p);//注意查询的节点类型为char
+    if (P)
     {
-        str[len] = tmp;
-        len++;
+        printf(&quot;节点%c的双亲是: %c\n&quot;,p,P-&gt;data);
     }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
+    else {
+        printf(&quot;查询的节点不存在,或节点为根节点\n&quot;);
     }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
-    }
-    char sb;
-    while (PoP(&amp;ans, &amp;tmp)) {
-        if (tmp == &#39;A&#39;) {
-            printf(&quot;sae&quot;);
-        }
-        else if (tmp == &#39;B&#39;) {
-            printf(&quot;tsaedsae&quot;);
-        }
-        else {
-            printf(&quot;%c&quot;, tmp);
-        }
-    }
-    return 0;
-}</code></pre>
-<h2 id="第四版"><a href="#第四版" class="headerlink" title="第四版"></a>第四版</h2><p>再去给老师看的时候，(((abc)))，猛陈落泪，输出还挺离谱的。<br>不过一番排查之后发现，其实是括号内输出的时候已经是倒着的序列，我在25行把它正过来了，但实际上work_()函数内读取的原字符串就是倒着的，因此删除那正过来的一小部分代码就可以了。</p>
-<pre><code class="bash">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &quot;SqStack.h&quot;
 
-//void workA() //特判A
-//{
-//    printf(&quot;sae&quot;);
-//}
-//void workB() //特判B
-//{
-//    printf(&quot;tsaedsae&quot;);
-//}
-void work_(linkStack* S,LinkQueue* Q) {
-    char temp;
-    LinkStack S1;
-    InitStack(&amp;S1);
-    while (PoP(S, &amp;temp)) {
-        if (temp == &#39;)&#39;) {
-            LinkQueue Qtemp;
-            InitQueue(&amp;Qtemp);
-            work_(S,&amp;Qtemp);
-            char temp_;
-            LinkStack Stemp;
-            InitStack(&amp;Stemp);
-            /*while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                Push(&amp;Stemp, temp_);
-            }
-            while (PoP(&amp;Stemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }*/
-            while (DeQueue(&amp;Qtemp, &amp;temp_)) {
-                EnQueue(Q, temp_);
-            }
-        }
-        else if (temp != &#39;(&#39;) {
-            //PoP(&amp;S, &amp;temp);
-            //Push(&amp;S1, temp);
-            EnQueue(Q,temp);
-        }
-        else {
-            char head;
-
-                while (DeQueue(Q, &amp;temp)) {
-                    Push(&amp;S1, temp);
-                }
-                PoP(&amp;S1, &amp;head);
-                EnQueue(Q, head);
-                while (PoP(&amp;S1, &amp;temp)) {
-                    EnQueue(Q, temp);
-                    EnQueue(Q, head);
-                }
-
-            break;
-        }
-    }
-}
-
-int main() {
-    char tmp;
-    char str[10000];
-    int len = 0;
-    LinkStack S;
-    InitStack(&amp;S);
-    LinkStack ans;
-    InitStack(&amp;ans);
-    printf(&quot;请输入魔王的语言，#结束：&quot;);
-    while ((tmp = getchar()) != &#39;#&#39;) //输入#结束
+    ElemType LC;
+    char lc;
+    cout &lt;&lt; &quot;请输入要查询长子的节点:&quot;;
+    cin &gt;&gt; lc;
+    LC = LeftChild(T, lc);//注意查询的节点类型为char
+    if (LC &amp;&amp; LC!=&#39;#&#39;)
     {
-        str[len] = tmp;
-        len++;
+        printf(&quot;节点%c的长子是: %c\n&quot;,lc,LC);
     }
-    for (int i = 0; i &lt; len; i++) {
-        Push(&amp;S, str[i]);
+    else if (LC == &#39;#&#39;) {
+        printf(&quot;节点%c为叶子节点，无长子\n&quot;,lc);
     }
-    while (PoP(&amp;S, &amp;tmp)) {
-        if (tmp == &#39;)&#39;) {
-            LinkQueue Q;
-            InitQueue(&amp;Q);
-            work_(&amp;S,&amp;Q);
-            while (DeQueue(&amp;Q, &amp;tmp)) {
-                Push(&amp;ans, tmp);
-            }
-        }
-        else {
-            Push(&amp;ans, tmp);
-        }
+    else {
+        printf(&quot;查询的节点不存在\n&quot;);
     }
-    char sb;
-    while (PoP(&amp;ans, &amp;tmp)) {
-        if (tmp == &#39;A&#39;) {
-            printf(&quot;sae&quot;);
-        }
-        else if (tmp == &#39;B&#39;) {
-            printf(&quot;tsaedsae&quot;);
-        }
-        else {
-            printf(&quot;%c&quot;, tmp);
-        }
+
+    ElemType RS;
+    char rs;
+    cout &lt;&lt; &quot;请输入要查询右兄弟的节点:&quot;;
+    cin &gt;&gt; rs;
+    RS = RightSibling(T, rs);//注意查询的节点类型为char
+    if (RS &amp;&amp; RS != &#39;#&#39;)
+    {
+        printf(&quot;节点%c的右兄弟是: %c\n&quot;, rs, RS);
+    }
+    else if (RS == &#39;#&#39;) {
+        printf(&quot;节点%c为叶子节点，无右兄弟\n&quot;, rs);
+    }
+    else {
+        printf(&quot;查询的节点不存在\n&quot;);
+    }
+
+    cout &lt;&lt; &quot;该树是否为空（1为是，0为否）：&quot; &lt;&lt; TreeEmpty(T) &lt;&lt; endl;
+    cout &lt;&lt; &quot;深度为：&quot; &lt;&lt; TreeDepth(T) &lt;&lt; endl;
+
+    char insert;
+    int id;
+    cout &lt;&lt; &quot;请输入将要插入的节点：&quot;;
+    cin &gt;&gt; insert;
+    cout &lt;&lt; &quot;请输入将要插入为第几棵子树：&quot;;
+    cin &gt;&gt; id;
+    if (InsertChild(T, insert, id)) {
+        cout &lt;&lt; &quot;新树先序遍历为：&quot; &lt;&lt; endl;
+        RePreOrderTraverse(T);
+        cout &lt;&lt; endl;
+    }
+    else {
+        cout &lt;&lt; &quot;输入不合法&quot; &lt;&lt; endl;
+    }
+
+    char dlete;
+    cout &lt;&lt; &quot;请输入将要删除子树的父节点：&quot;;
+    cin &gt;&gt; dlete;
+    cout &lt;&lt; &quot;请输入将要删除第几棵子树：&quot;;
+    cin &gt;&gt; id;
+    if (DeleteChild(T, dlete, id)) {
+        cout &lt;&lt; &quot;新树先序遍历为：&quot; &lt;&lt; endl;
+        RePreOrderTraverse(T);
+        cout &lt;&lt; endl;
+    }
+    else {
+        cout &lt;&lt; &quot;输入不合法&quot; &lt;&lt; endl;
     }
     return 0;
 }</code></pre>
@@ -476,16 +647,11 @@ int main() {
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
                     
-                      <a href="/2020/11/23/Transform/">
-                        <i class="fa fa-chevron-left"></i>
-                        <span>Transform</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-12 col-md-6">
                     
-                      <a href="/2020/10/29/%E5%A4%A7%E6%95%B0%E7%B1%BB%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
-                        <span>大数类运算符重载</span>
+                      <a href="/2020/11/23/Transform/">
+                        <span>Transform</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
                     
@@ -660,7 +826,7 @@ int main() {
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "魔王队列&nbsp;",
+        "ChildSibilingTree&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
